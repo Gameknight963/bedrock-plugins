@@ -1,0 +1,13 @@
+{
+  "project": "src/BackdropBlurFix.vcxproj",
+  "files": {
+    "plugin.json": "plugin.json",
+    "README.md": "README.md",
+    "LICENSE": "LICENSE",
+    "src/bin/x64/Release/backdrop-blur-fix.dll": "native/win32-x64/backdrop-blur-fix.dll",
+    "src/bin/x64/Release/minhook-LICENSE.txt": "native/win32-x64/minhook-LICENSE.txt",
+    "src/bin/x64/Release/Skia-LICENSE.txt": "native/win32-x64/Skia-LICENSE.txt",
+    "src/bin/x64/Release/Chromium-LICENSE.txt": "native/win32-x64/Chromium-LICENSE.txt",
+    "package.json": "package.json"
+  }
+}

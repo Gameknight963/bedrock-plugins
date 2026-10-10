@@ -1,0 +1,58 @@
+name: Release plugins
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Collection tag: collection-YYYY-MM-DD-N'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: plugin-release
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python tools/prepare_sdk.py
+      - run: python -m unittest discover -s tests -p "test_*.py"
+      - run: node --test tests/*.test.cjs
+      - run: python tools/build.py --toolset v143 --source-commit $env:GITHUB_SHA --base-url "https://github.com/$env:GITHUB_REPOSITORY/releases/download/$env:COLLECTION_TAG"
+        env:
+          COLLECTION_TAG: ${{ inputs.tag }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-packages
+          path: .artifacts/dist/*
+  publish:
+    needs: build
+    runs-on: windows-2022
+    environment: plugin-releases
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-packages
+          path: .artifacts/dist
+      - run: python tools/release.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COLLECTION_TAG: ${{ inputs.tag }}

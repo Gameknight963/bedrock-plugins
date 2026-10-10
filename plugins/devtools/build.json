@@ -1,0 +1,9 @@
+{
+  "files": {
+    "plugin.json": "plugin.json",
+    "README.md": "README.md",
+    "LICENSE": "LICENSE",
+    "main.js": "main.js",
+    "package.json": "package.json"
+  }
+}

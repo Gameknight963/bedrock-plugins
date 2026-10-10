@@ -1,0 +1,15 @@
+{
+  "project": "src/WindowCustomization.vcxproj",
+  "files": {
+    "plugin.json": "plugin.json",
+    "README.md": "README.md",
+    "LICENSE": "LICENSE",
+    "main.js": "main.js",
+    "src/bin/x64/Release/window.node": "native/win32-x64/window.node",
+    "Titlebar-For-Everyone-LICENSE.txt": "native/win32-x64/Titlebar-For-Everyone-LICENSE.txt",
+    "package.json": "package.json"
+  },
+  "sdkNotices": {
+    "lib/node-api/LICENSE": "native/win32-x64/Node-API-LICENSE.txt"
+  }
+}

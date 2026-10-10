@@ -1,0 +1,14 @@
+{
+  "project": "src/Console.vcxproj",
+  "files": {
+    "plugin.json": "plugin.json",
+    "README.md": "README.md",
+    "LICENSE": "LICENSE",
+    "main.js": "main.js",
+    "src/bin/x64/Release/console.node": "native/win32-x64/console.node",
+    "package.json": "package.json"
+  },
+  "sdkNotices": {
+    "lib/node-api/LICENSE": "native/win32-x64/Node-API-LICENSE.txt"
+  }
+}
