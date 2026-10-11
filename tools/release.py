@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,19 +19,26 @@ def gh(*args):
     return subprocess.check_output(["gh", *args], text=True)
 
 
+def next_tag(tags, date):
+    prefix = f"collection-{date}-"
+    numbers = [int(tag[len(prefix):]) for tag in tags
+               if tag.startswith(prefix) and re.fullmatch(r"[1-9]\d*", tag[len(prefix):])]
+    return prefix + str(max(numbers, default=0) + 1)
+
+
 def main():
-    tag = os.environ["COLLECTION_TAG"]
     repository = os.environ["GITHUB_REPOSITORY"]
     commit = os.environ["GITHUB_SHA"]
-    if not re.fullmatch(r"collection-\d{4}-\d{2}-\d{2}-[1-9]\d*", tag):
-        raise ValueError("Release tag must be collection-YYYY-MM-DD-N")
     releases = json.loads(gh("api", "--paginate", "--slurp", f"repos/{repository}/releases"))
+    tag_pages = json.loads(gh("api", "--paginate", "--slurp", f"repos/{repository}/tags"))
+    tags = {entry["name"] for page in tag_pages for entry in page}
+    tags.update(entry["tag_name"] for page in releases for entry in page)
+    tag = next_tag(tags, datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+    print(f"Publishing {tag}", flush=True)
     history = ROOT / ".artifacts/history"
     published = {}
     for page in releases:
         for release in page:
-            if release["tag_name"] == tag:
-                raise ValueError("Release already exists; choose a new collection tag")
             previous_tag = release["tag_name"]
             if release["draft"] or not re.fullmatch(r"collection-\d{4}-\d{2}-\d{2}-[1-9]\d*", previous_tag):
                 continue
@@ -45,6 +53,8 @@ def main():
     catalog_file = dist / "catalog.json"
     catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
     for record in catalog["plugins"]:
+        filename = f"{record['manifest']['id']}-{record['manifest']['version']}.zip"
+        record["package"]["url"] = f"https://github.com/{repository}/releases/download/{tag}/{filename}"
         key = (record["manifest"]["id"], record["manifest"]["version"])
         if key not in published:
             continue

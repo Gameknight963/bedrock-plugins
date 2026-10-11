@@ -23,6 +23,12 @@ release = module("release")
 
 
 class PackagingTests(unittest.TestCase):
+    def test_collection_tag_uses_next_number_for_today(self):
+        self.assertEqual(release.next_tag([], "2026-10-10"), "collection-2026-10-10-1")
+        tags = ["collection-2026-10-09-20", "collection-2026-10-10-1",
+                "collection-2026-10-10-4", "collection-2026-10-10-invalid", "v1.0.0"]
+        self.assertEqual(release.next_tag(tags, "2026-10-10"), "collection-2026-10-10-5")
+
     def test_every_plugin_has_one_project_in_the_solution(self):
         listed = {entry.attrib["Path"] for entry in ET.parse(ROOT / "Plugins.slnx").getroot().iter("Project")}
         expected = set()

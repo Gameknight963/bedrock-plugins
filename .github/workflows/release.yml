@@ -1,11 +1,6 @@
 name: Release plugins
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Collection tag: collection-YYYY-MM-DD-N'
-        required: true
-        type: string
 permissions:
   contents: read
 concurrency:
@@ -31,9 +26,7 @@ jobs:
       - run: python tools/prepare_sdk.py
       - run: python -m unittest discover -s tests -p "test_*.py"
       - run: node --test tests/*.test.cjs
-      - run: python tools/build.py --toolset v143 --source-commit $env:GITHUB_SHA --base-url "https://github.com/$env:GITHUB_REPOSITORY/releases/download/$env:COLLECTION_TAG"
-        env:
-          COLLECTION_TAG: ${{ inputs.tag }}
+      - run: python tools/build.py --toolset v143 --source-commit $env:GITHUB_SHA
       - uses: actions/upload-artifact@v4
         with:
           name: release-packages
@@ -58,4 +51,3 @@ jobs:
       - run: python tools/release.py
         env:
           GH_TOKEN: ${{ github.token }}
-          COLLECTION_TAG: ${{ inputs.tag }}
