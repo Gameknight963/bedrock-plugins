@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <PluginPackageDir Condition="'$(PluginPackageDir)' == ''">$(MSBuildThisFileDirectory)..\.artifacts\packages\$([System.IO.Path]::GetFileName('$(MSBuildProjectDirectory)'))</PluginPackageDir>
+    <_PluginBuildTargets Condition="'$(PluginSkipBuild)' != 'true'">Build</_PluginBuildTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <PluginFile><PackagePath>%(Filename)%(Extension)</PackagePath></PluginFile>
+  </ItemDefinitionGroup>
+  <Target Name="PackagePlugin" DependsOnTargets="$(_PluginBuildTargets)">
+    <Error Condition="'@(PluginFile)' == ''" Text="The project must declare PluginFile items." />
+    <Error Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(PluginFile.PackagePath)', '(^|[\\/])\.\.([\\/]|$)|^[\\/]|^[A-Za-z]:'))" Text="PackagePath must stay inside the plugin folder: %(PluginFile.PackagePath)" />
+    <Error Condition="!Exists('%(PluginFile.FullPath)')" Text="Missing package file: %(PluginFile.FullPath)" />
+    <RemoveDuplicates Inputs="@(PluginFile->'%(PackagePath)')">
+      <Output TaskParameter="Filtered" ItemName="_UniquePluginPaths" />
+    </RemoveDuplicates>
+    <Error Condition="'@(_UniquePluginPaths->Count())' != '@(PluginFile->Count())'" Text="PluginFile items must have unique PackagePath values." />
+    <MakeDir Directories="$(PluginPackageDir)" />
+    <Copy SourceFiles="@(PluginFile)" DestinationFiles="@(PluginFile->'$(PluginPackageDir)\%(PackagePath)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

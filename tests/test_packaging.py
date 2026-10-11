@@ -1,6 +1,8 @@
 import importlib.util
 import json
 import tempfile
+import subprocess
+from xml.sax.saxutils import escape
 import unittest
 import zipfile
 import xml.etree.ElementTree as ET
@@ -27,10 +29,11 @@ class PackagingTests(unittest.TestCase):
         for folder in (ROOT / "plugins").iterdir():
             if not folder.is_dir():
                 continue
-            definition = json.loads((folder / "build.json").read_text())
-            project = folder / definition["project"]
             projects = [file for file in folder.iterdir() if file.suffix in {".esproj", ".vcxproj", ".csproj"}]
-            self.assertEqual(projects, [project], folder.name)
+            self.assertEqual(len(projects), 1, folder.name)
+            project = projects[0]
+            imports = [entry.attrib.get("Project", "") for entry in ET.parse(project).getroot().iter() if entry.tag.rsplit("}", 1)[-1] == "Import"]
+            self.assertTrue(any(value.endswith("Plugin.targets") for value in imports), folder.name)
             expected.add(project.relative_to(ROOT).as_posix())
         self.assertEqual(listed, expected)
 
@@ -54,9 +57,23 @@ class PackagingTests(unittest.TestCase):
             plugin = root / "plugin"
             plugin.mkdir()
             (plugin / "plugin.json").write_text(json.dumps({"manifestVersion": 2, "id": "test.plugin", "version": "1.0.0", "entrypoints": {"renderer": {"runtime": "javascript", "path": "missing.js"}}}))
-            (plugin / "build.json").write_text(json.dumps({"files": {"plugin.json": "plugin.json", "README.md": "README.md", "LICENSE": "LICENSE"}}))
+            (plugin / "README.md").write_text("Description")
+            (plugin / "LICENSE").write_text("License")
             with self.assertRaisesRegex(ValueError, "entry point"):
-                build.package(plugin, root / "output")
+                build.package(plugin)
+
+    def test_shared_target_rejects_traversal_and_duplicate_destinations(self):
+        msbuild = build.find_msbuild()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "file.txt").write_text("Content")
+            for paths in [["../escaped.txt"], ["..\\escaped.txt"], ["same.txt", "same.txt"]]:
+                items = "".join(f'<PluginFile Include="file.txt"><PackagePath>{path}</PackagePath></PluginFile>' for path in paths)
+                project = root / "Fixture.proj"
+                project.write_text(f'<Project><Target Name="Build" /><ItemGroup>{items}</ItemGroup><Import Project="{escape(str(ROOT / "tools/Plugin.targets"))}" /></Project>')
+                result = subprocess.run([msbuild, str(project), "/t:PackagePlugin", f"/p:PluginPackageDir={root / 'package'}", "/nologo"], capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0, result.stdout)
+                self.assertFalse((root / "escaped.txt").exists())
 
     def test_archives_are_stable_and_contain_one_folder(self):
         with tempfile.TemporaryDirectory() as directory:

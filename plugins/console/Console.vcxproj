@@ -53,7 +53,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="build.json" />
     <None Include="LICENSE" />
     <None Include="main.js" />
     <None Include="package.json" />
@@ -61,4 +60,16 @@
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <PluginFile Include="plugin.json"><PackagePath>plugin.json</PackagePath></PluginFile>
+      <PluginFile Include="README.md"><PackagePath>README.md</PackagePath></PluginFile>
+      <PluginFile Include="LICENSE"><PackagePath>LICENSE</PackagePath></PluginFile>
+      <PluginFile Include="main.js"><PackagePath>main.js</PackagePath></PluginFile>
+      <PluginFile Include="$(TargetPath)"><PackagePath>native\win32-x64\console.node</PackagePath></PluginFile>
+      <PluginFile Include="package.json"><PackagePath>package.json</PackagePath></PluginFile>
+      <PluginFile Include="$(BedrockSdkRoot)\lib\node-api\LICENSE"><PackagePath>native\win32-x64\Node-API-LICENSE.txt</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
 </Project>

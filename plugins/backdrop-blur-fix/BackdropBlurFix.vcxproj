@@ -24,7 +24,6 @@
   <ItemGroup><ClInclude Include="src\signatures.h" /></ItemGroup>
   <ItemGroup><ClInclude Include="src\status.h" /><ClInclude Include="$(BedrockSdkRoot)\include\bedrock\plugin.h" /></ItemGroup>
   <ItemGroup>
-    <None Include="build.json" />
     <None Include="LICENSE" />
     <None Include="package.json" />
     <None Include="plugin.json" />
@@ -32,4 +31,17 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="CopyNativeLicenses" AfterTargets="Build"><Copy SourceFiles="$(BedrockSdkRoot)\lib\minhook\LICENSE.txt" DestinationFiles="$(OutDir)minhook-LICENSE.txt" SkipUnchangedFiles="true" /><Copy SourceFiles="$(ProjectDir)src\Skia-LICENSE.txt;$(ProjectDir)src\Chromium-LICENSE.txt" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" /></Target>
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <PluginFile Include="plugin.json"><PackagePath>plugin.json</PackagePath></PluginFile>
+      <PluginFile Include="README.md"><PackagePath>README.md</PackagePath></PluginFile>
+      <PluginFile Include="LICENSE"><PackagePath>LICENSE</PackagePath></PluginFile>
+      <PluginFile Include="$(TargetPath)"><PackagePath>native\win32-x64\backdrop-blur-fix.dll</PackagePath></PluginFile>
+      <PluginFile Include="src\bin\x64\Release\minhook-LICENSE.txt"><PackagePath>native\win32-x64\minhook-LICENSE.txt</PackagePath></PluginFile>
+      <PluginFile Include="src\bin\x64\Release\Skia-LICENSE.txt"><PackagePath>native\win32-x64\Skia-LICENSE.txt</PackagePath></PluginFile>
+      <PluginFile Include="src\bin\x64\Release\Chromium-LICENSE.txt"><PackagePath>native\win32-x64\Chromium-LICENSE.txt</PackagePath></PluginFile>
+      <PluginFile Include="package.json"><PackagePath>package.json</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
 </Project>

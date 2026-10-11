@@ -42,37 +42,21 @@ def find_msbuild():
     return matches[0]
 
 
-def package(folder, output):
-    manifest = json.loads((folder / "plugin.json").read_text())
-    build = json.loads((folder / "build.json").read_text())
+def package(folder):
+    manifest = json.loads((folder / "plugin.json").read_text(encoding="utf-8"))
     if manifest.get("manifestVersion") != 2 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", manifest.get("id", "")):
         raise ValueError(f"Invalid manifest in {folder.name}")
     if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?", manifest.get("version", "")):
         raise ValueError(f"Invalid version in {folder.name}")
-    files = build.get("files", {})
-    if not isinstance(files, dict) or not {"plugin.json", "README.md", "LICENSE"}.issubset(files.values()):
-        raise ValueError(f"{folder.name} must package plugin.json, README.md and LICENSE")
-    paths = set()
-    for source, target in files.items():
-        contained(folder, source)
-        contained(output, target)
-        if target.casefold() in paths:
-            raise ValueError(f"Duplicate package path: {target}")
-        paths.add(target.casefold())
+    for required in ["plugin.json", "README.md", "LICENSE"]:
+        if not (folder / required).is_file():
+            raise ValueError(f"{folder.name} must package {required}")
     for entry in manifest.get("entrypoints", {}).values():
-        if entry.get("runtime") not in {"javascript", "native", "dotnet"} or entry.get("path") not in files.values():
+        if entry.get("runtime") not in {"javascript", "native", "dotnet"} or not contained(folder, entry.get("path")).is_file():
             raise ValueError(f"{folder.name} does not package its declared entry point")
-    if not manifest.get("entrypoints") or manifest.get("readme", "README.md") not in files.values():
+    if not manifest.get("entrypoints") or not contained(folder, manifest.get("readme", "README.md")).is_file():
         raise ValueError(f"Invalid entry points or README in {folder.name}")
-    output.mkdir(parents=True, exist_ok=True)
-    for source, target in files.items():
-        source_path = contained(folder, source)
-        if not source_path.is_file():
-            raise ValueError(f"Missing package file: {folder.name}/{source}")
-        destination = contained(output, target)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source_path, destination)
-    return manifest, build
+    return manifest
 
 
 def archive(folder, destination):
@@ -119,36 +103,31 @@ def main():
     for folder in sorted((ROOT / "plugins").iterdir()):
         if not folder.is_dir():
             continue
-        build = json.loads((folder / "build.json").read_text())
-        project = contained(folder, build["project"])
-        if not project.is_file():
-            raise ValueError(f"Missing plugin project: {project}")
-        if not args.skip_build:
-            if project.suffix == ".csproj":
-                command = ["dotnet", "build", str(project), "-c", "Release", "--nologo", f"-p:BedrockSdkRoot={sdk}"]
-            elif project.suffix in {".esproj", ".vcxproj"}:
-                msbuild = msbuild or args.msbuild or find_msbuild()
-                platform = "AnyCPU" if project.suffix == ".esproj" else "x64"
-                command = [msbuild, str(project), "/restore", "/p:Configuration=Release", f"/p:Platform={platform}", f"/p:BedrockSdkRoot={sdk}", "/verbosity:minimal", "/nologo"]
-                if args.toolset and project.suffix == ".vcxproj":
-                    command.append(f"/p:PlatformToolset={args.toolset}")
-            else:
-                raise ValueError(f"Unsupported project type: {project.suffix}")
-            subprocess.run(command, check=True)
+        projects = [file for file in folder.iterdir() if file.suffix in {".esproj", ".vcxproj", ".csproj"}]
+        if len(projects) != 1:
+            raise ValueError(f"{folder.name} must contain exactly one plugin project")
+        project = projects[0]
         output = artifacts / "packages" / folder.name
-        manifest, build = package(folder, output)
+        properties = [f"/p:BedrockSdkRoot={sdk}", f"/p:PluginPackageDir={output}"]
+        if args.skip_build:
+            properties.append("/p:PluginSkipBuild=true")
+        if project.suffix == ".csproj":
+            command = ["dotnet", "msbuild", str(project), "/restore", "/t:PackagePlugin", "/p:Configuration=Release", "/nologo", *properties]
+        else:
+            msbuild = msbuild or args.msbuild or find_msbuild()
+            platform = "AnyCPU" if project.suffix == ".esproj" else "x64"
+            command = [msbuild, str(project), "/restore", "/t:PackagePlugin", "/p:Configuration=Release", f"/p:Platform={platform}", "/verbosity:minimal", "/nologo", *properties]
+            if args.toolset and project.suffix == ".vcxproj":
+                command.append(f"/p:PlatformToolset={args.toolset}")
+        subprocess.run(command, check=True)
+        manifest = package(output)
         if manifest["id"] in ids:
             raise ValueError(f"Duplicate plugin id: {manifest['id']}")
         ids.add(manifest["id"])
-        for source, target in build.get("sdkNotices", {}).items():
-            destination = contained(output, target)
-            if destination.exists():
-                raise ValueError(f"SDK notice overwrites a package file: {target}")
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(contained(sdk, source), destination)
         filename = f"{manifest['id']}-{manifest['version']}.zip"
         checksum = archive(output, dist / filename)
         tree = hashlib.sha256((ROOT / "sdk.json").read_bytes())
+        tree.update((ROOT / "tools/Plugin.targets").read_bytes())
         for file in sorted(folder.rglob("*")):
             relative = file.relative_to(folder)
             if file.is_file() and not any(part in {"bin", "obj"} for part in relative.parts):
