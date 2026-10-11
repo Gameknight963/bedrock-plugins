@@ -2,7 +2,13 @@
 
 Thank you so much for your interest in contributing!
 
-To add a plugin, add a folder under `plugins/` and submit a pull request. Include source, `plugin.json`, `README.md`, `LICENSE`, and `build.json`. Keep the displayed README focused on what the plugin does, and its settings and limitations. It's designed to show up in the plugin UI, so don't include build instructions there.
+To add a plugin, add a folder under `plugins/` and submit a pull request. Include source, `plugin.json`, `README.md`, `LICENSE`, `build.json`, and a project file in the plugin folder. Add the project directly to `Plugins.slnx`:
+
+ - `.esproj` for JavaScript/TypeScript, 
+ - `.vcxproj` for C/C++, or 
+ - `.csproj` for C#. 
+
+Keep the displayed README focused on what the plugin does, and its settings and limitations. It's designed to show up in the plugin UI, so don't include build instructions there.
 
 ## Review policy
 
@@ -18,7 +24,7 @@ To add a plugin, add a folder under `plugins/` and submit a pull request. Includ
 
 ```json
 {
-  "project": "src/Example.vcxproj",
+  "project": "Example.vcxproj",
   "files": {
     "plugin.json": "plugin.json",
     "README.md": "README.md",
@@ -29,6 +35,6 @@ To add a plugin, add a folder under `plugins/` and submit a pull request. Includ
 }
 ```
 
-Omit `project` for JavaScript-only plugins. Paths on the left are source files inside the plugin folder; paths on the right are their installed locations. `sdkNotices` can additionally map SDK license files to package locations. Use the pinned SDK through `BedrockSdkRoot` in native projects.
+`project` is required for every plugin. Plain JavaScript projects disable npm installation and build scripts; they need no compilation. TypeScript projects can enable their build script. Paths on the left are source files inside the plugin folder; paths on the right are their installed locations. `sdkNotices` can additionally map SDK license files to package locations. Use the pinned SDK through `BedrockSdkRoot` in native projects.
 
 Increment the plugin version when changing a published package. CI rejects changing an already published version to different package contents. Changing `sdk.json` requires review, just like changing a dependency.

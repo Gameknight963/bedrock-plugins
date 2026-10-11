@@ -1,5 +1,5 @@
 {
-  "project": "src/WindowCustomization.vcxproj",
+  "project": "WindowCustomization.vcxproj",
   "files": {
     "plugin.json": "plugin.json",
     "README.md": "README.md",

@@ -19,12 +19,12 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup><BedrockSdkRoot Condition="'$(BedrockSdkRoot)'==''">$(ProjectDir)..\..\..\.sdk\bedrock</BedrockSdkRoot></PropertyGroup>
+  <PropertyGroup><BedrockSdkRoot Condition="'$(BedrockSdkRoot)'==''">$(ProjectDir)..\..\.sdk\bedrock</BedrockSdkRoot></PropertyGroup>
   <PropertyGroup>
     <TargetName>window</TargetName>
     <TargetExt>.node</TargetExt>
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)src\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)src\obj\$(Platform)\$(Configuration)\</IntDir>
     <NodeLibraryMachine Condition="'$(Platform)'=='x64'">X64</NodeLibraryMachine>
     <NodeLibraryMachine Condition="'$(Platform)'=='Win32'">X86</NodeLibraryMachine>
   </PropertyGroup>
@@ -44,14 +44,23 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup><ClCompile Include="exports.c" /><ClCompile Include="window.c" /><ClCompile Include="delay-load.c" /></ItemGroup>
-  <ItemGroup><ClInclude Include="window.h" /></ItemGroup>
+  <ItemGroup><ClCompile Include="src\exports.c" /><ClCompile Include="src\window.c" /><ClCompile Include="src\delay-load.c" /></ItemGroup>
+  <ItemGroup><ClInclude Include="src\window.h" /></ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="node.def">
+    <CustomBuild Include="src\node.def">
       <Command>lib.exe /nologo /def:"%(FullPath)" /machine:$(NodeLibraryMachine) /out:"$(IntDir)node.lib"</Command>
       <Outputs>$(IntDir)node.lib</Outputs>
       <Message>Generating the Node-API import library</Message>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="build.json" />
+    <None Include="LICENSE" />
+    <None Include="main.js" />
+    <None Include="package.json" />
+    <None Include="plugin.json" />
+    <None Include="README.md" />
+    <None Include="Titlebar-For-Everyone-LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

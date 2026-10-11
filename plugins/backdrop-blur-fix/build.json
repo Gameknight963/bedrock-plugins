@@ -1,5 +1,5 @@
 {
-  "project": "src/BackdropBlurFix.vcxproj",
+  "project": "BackdropBlurFix.vcxproj",
   "files": {
     "plugin.json": "plugin.json",
     "README.md": "README.md",

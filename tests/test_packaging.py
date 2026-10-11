@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +21,19 @@ release = module("release")
 
 
 class PackagingTests(unittest.TestCase):
+    def test_every_plugin_has_one_project_in_the_solution(self):
+        listed = {entry.attrib["Path"] for entry in ET.parse(ROOT / "Plugins.slnx").getroot().iter("Project")}
+        expected = set()
+        for folder in (ROOT / "plugins").iterdir():
+            if not folder.is_dir():
+                continue
+            definition = json.loads((folder / "build.json").read_text())
+            project = folder / definition["project"]
+            projects = [file for file in folder.iterdir() if file.suffix in {".esproj", ".vcxproj", ".csproj"}]
+            self.assertEqual(projects, [project], folder.name)
+            expected.add(project.relative_to(ROOT).as_posix())
+        self.assertEqual(listed, expected)
+
     def test_plugin_sources_do_not_contain_binaries(self):
         for file in (ROOT / "plugins").rglob("*"):
             relative = file.relative_to(ROOT / "plugins")

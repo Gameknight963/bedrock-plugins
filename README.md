@@ -6,7 +6,7 @@ Each plugin is licensed separately (see the `LICENSE` file in its folder). Repos
 
 ## Layout
 
-- `plugins/` contains plugin source, manifests, READMEs, licenses and build definitions.
+- `plugins/` contains plugin source, manifests, READMEs, licenses and build definitions. Each plugin has one project, listed directly in `Plugins.slnx`.
 - `tools/` builds packages and generates the catalog.
 - `tests/` checks plugin behavior and packaging.
 - `sdk.json` pins the Bedrock source revision used as the build SDK.
@@ -14,6 +14,9 @@ Each plugin is licensed separately (see the `LICENSE` file in its folder). Repos
 The Example plugin remains in Bedrock's `Examples` directory rather than the official collection.
 
 ## Build
+
+ - JavaScript projects use the Visual Studio JavaScript SDK
+ - C# projects require the .NET SDK version targeted by their project
 
 Run `python tools/prepare_sdk.py` to fetch the pinned SDK. Then run `python tools/build.py` on Windows with Visual Studio's C++ build tools installed. Native packages currently target Windows x64. Projects currently use the v145 toolset, if that's an issue you can pass `--toolset v143` which selects the toolset used by CI. `--sdk PATH` uses an existing checkout at the pinned revision.
 

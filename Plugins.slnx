@@ -1,6 +1,8 @@
 <Solution>
   <Configurations><Platform Name="x64" /></Configurations>
-  <Project Path="plugins/console/src/Console.vcxproj" />
-  <Project Path="plugins/window-customization/src/WindowCustomization.vcxproj" />
-  <Project Path="plugins/backdrop-blur-fix/src/BackdropBlurFix.vcxproj" />
+  <Project Path="plugins/console/Console.vcxproj" />
+  <Project Path="plugins/window-customization/WindowCustomization.vcxproj" />
+  <Project Path="plugins/backdrop-blur-fix/BackdropBlurFix.vcxproj" />
+  <Project Path="plugins/devtools/DevTools.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/selectable-settings/SelectableSettings.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>

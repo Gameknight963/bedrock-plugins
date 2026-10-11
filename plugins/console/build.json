@@ -1,5 +1,5 @@
 {
-  "project": "src/Console.vcxproj",
+  "project": "Console.vcxproj",
   "files": {
     "plugin.json": "plugin.json",
     "README.md": "README.md",

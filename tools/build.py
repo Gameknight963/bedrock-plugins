@@ -120,11 +120,20 @@ def main():
         if not folder.is_dir():
             continue
         build = json.loads((folder / "build.json").read_text())
-        if build.get("project") and not args.skip_build:
-            msbuild = msbuild or args.msbuild or find_msbuild()
-            command = [msbuild, str(contained(folder, build["project"])), "/p:Configuration=Release", "/p:Platform=x64", f"/p:BedrockSdkRoot={sdk}", "/verbosity:minimal", "/nologo"]
-            if args.toolset:
-                command.append(f"/p:PlatformToolset={args.toolset}")
+        project = contained(folder, build["project"])
+        if not project.is_file():
+            raise ValueError(f"Missing plugin project: {project}")
+        if not args.skip_build:
+            if project.suffix == ".csproj":
+                command = ["dotnet", "build", str(project), "-c", "Release", "--nologo", f"-p:BedrockSdkRoot={sdk}"]
+            elif project.suffix in {".esproj", ".vcxproj"}:
+                msbuild = msbuild or args.msbuild or find_msbuild()
+                platform = "AnyCPU" if project.suffix == ".esproj" else "x64"
+                command = [msbuild, str(project), "/restore", "/p:Configuration=Release", f"/p:Platform={platform}", f"/p:BedrockSdkRoot={sdk}", "/verbosity:minimal", "/nologo"]
+                if args.toolset and project.suffix == ".vcxproj":
+                    command.append(f"/p:PlatformToolset={args.toolset}")
+            else:
+                raise ValueError(f"Unsupported project type: {project.suffix}")
             subprocess.run(command, check=True)
         output = artifacts / "packages" / folder.name
         manifest, build = package(folder, output)

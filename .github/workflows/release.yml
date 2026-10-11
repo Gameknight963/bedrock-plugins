@@ -25,6 +25,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
       - run: python tools/prepare_sdk.py
       - run: python -m unittest discover -s tests -p "test_*.py"
       - run: node --test tests/*.test.cjs

@@ -1,4 +1,5 @@
 {
+  "project": "DevTools.esproj",
   "files": {
     "plugin.json": "plugin.json",
     "README.md": "README.md",

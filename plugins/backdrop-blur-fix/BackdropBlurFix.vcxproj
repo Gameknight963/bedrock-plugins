@@ -8,21 +8,28 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration"><ConfigurationType>DynamicLibrary</ConfigurationType><PlatformToolset>v145</PlatformToolset><CharacterSet>Unicode</CharacterSet></PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup><BedrockSdkRoot Condition="'$(BedrockSdkRoot)'==''">$(ProjectDir)..\..\..\.sdk\bedrock</BedrockSdkRoot></PropertyGroup>
-  <PropertyGroup><TargetName>backdrop-blur-fix</TargetName><OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir><IntDir>$(ProjectDir)obj\backdrop-blur-fix\$(Platform)\$(Configuration)\</IntDir></PropertyGroup>
+  <PropertyGroup><BedrockSdkRoot Condition="'$(BedrockSdkRoot)'==''">$(ProjectDir)..\..\.sdk\bedrock</BedrockSdkRoot></PropertyGroup>
+  <PropertyGroup><TargetName>backdrop-blur-fix</TargetName><OutDir>$(ProjectDir)src\bin\$(Platform)\$(Configuration)\</OutDir><IntDir>$(ProjectDir)src\obj\backdrop-blur-fix\$(Platform)\$(Configuration)\</IntDir></PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile><CompileAs>CompileAsC</CompileAs><LanguageStandard_C>stdc17</LanguageStandard_C><WarningLevel>Level4</WarningLevel><RuntimeLibrary>MultiThreaded</RuntimeLibrary><BufferSecurityCheck>false</BufferSecurityCheck><AdditionalIncludeDirectories>$(BedrockSdkRoot)\include;$(BedrockSdkRoot)\lib\minhook\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories><PreprocessorDefinitions>UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions></ClCompile>
     <Link><GenerateDebugInformation>true</GenerateDebugInformation><IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries><AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies><EntryPointSymbol>DllMain</EntryPointSymbol></Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="hook.c" /><ClCompile Include="plugin.c" /><ClCompile Include="memory.c" />
+    <ClCompile Include="src\hook.c" /><ClCompile Include="src\plugin.c" /><ClCompile Include="src\memory.c" />
     <ClCompile Include="$(BedrockSdkRoot)\lib\minhook\src\buffer.c"><WarningLevel>Level3</WarningLevel></ClCompile>
     <ClCompile Include="$(BedrockSdkRoot)\lib\minhook\src\hook.c"><ObjectFileName>$(IntDir)minhook.obj</ObjectFileName><WarningLevel>Level3</WarningLevel><DisableSpecificWarnings>4244;4310;%(DisableSpecificWarnings)</DisableSpecificWarnings></ClCompile>
     <ClCompile Include="$(BedrockSdkRoot)\lib\minhook\src\trampoline.c"><WarningLevel>Level3</WarningLevel><DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings></ClCompile>
     <ClCompile Include="$(BedrockSdkRoot)\lib\minhook\src\hde\hde64.c"><WarningLevel>Level3</WarningLevel><DisableSpecificWarnings>4701;%(DisableSpecificWarnings)</DisableSpecificWarnings></ClCompile>
   </ItemGroup>
-  <ItemGroup><ClInclude Include="signatures.h" /></ItemGroup>
-  <ItemGroup><ClInclude Include="status.h" /><ClInclude Include="$(BedrockSdkRoot)\include\bedrock\plugin.h" /></ItemGroup>
+  <ItemGroup><ClInclude Include="src\signatures.h" /></ItemGroup>
+  <ItemGroup><ClInclude Include="src\status.h" /><ClInclude Include="$(BedrockSdkRoot)\include\bedrock\plugin.h" /></ItemGroup>
+  <ItemGroup>
+    <None Include="build.json" />
+    <None Include="LICENSE" />
+    <None Include="package.json" />
+    <None Include="plugin.json" />
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <Target Name="CopyNativeLicenses" AfterTargets="Build"><Copy SourceFiles="$(BedrockSdkRoot)\lib\minhook\LICENSE.txt" DestinationFiles="$(OutDir)minhook-LICENSE.txt" SkipUnchangedFiles="true" /><Copy SourceFiles="$(ProjectDir)Skia-LICENSE.txt;$(ProjectDir)Chromium-LICENSE.txt" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" /></Target>
+  <Target Name="CopyNativeLicenses" AfterTargets="Build"><Copy SourceFiles="$(BedrockSdkRoot)\lib\minhook\LICENSE.txt" DestinationFiles="$(OutDir)minhook-LICENSE.txt" SkipUnchangedFiles="true" /><Copy SourceFiles="$(ProjectDir)src\Skia-LICENSE.txt;$(ProjectDir)src\Chromium-LICENSE.txt" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" /></Target>
 </Project>
