@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-
 const { definePluginSettings, OptionType } = Bedrock;
-const require = createRequire(import.meta.url);
 let native;
 
 export const settings = definePluginSettings({
@@ -48,7 +45,7 @@ export function start(ctx) {
         let url;
         try { url = new URL(window.webContents.getURL()); } catch { return; }
         if (url.protocol !== 'https:' || !['discord.com', 'canary.discord.com', 'ptb.discord.com'].includes(url.hostname)) return;
-        native ||= require(`./native/${process.platform}-${process.arch}/window.node`);
+        native ||= Bedrock.require(`./native/${process.platform}-${process.arch}/window.node`, import.meta.url);
         const options = { nativeTitlebar: settings.store.nativeTitlebar, resizableFrame: settings.store.resizableFrame };
         const record = windows.get(window);
         if (record.customization) record.customization.update(options);
@@ -74,7 +71,7 @@ export function start(ctx) {
             record.patches.push(ctx.patches.instead(window, 'isMaximized', () =>
                 !record.fullscreen && !window.isMinimized() && Boolean(native.getStyle(window.getNativeWindowHandle()) & 0x01000000))); // WS_MAXIMIZE
             record.patches.push(ctx.patches.instead(window, 'getNormalBounds', () =>
-                require('electron').screen.screenToDipRect(window, record.customization.getNormalBounds())));
+                Bedrock.require('electron').screen.screenToDipRect(window, record.customization.getNormalBounds())));
             record.key = (event, input) => {
                 if (input.type !== 'keyDown' || input.key !== 'F11' || input.control || input.alt || input.meta || input.shift) return;
                 event.preventDefault();
@@ -114,4 +111,10 @@ export function start(ctx) {
     }));
     ctx.windows.onCreated(attach);
     for (const window of ctx.windows.all()) attach(window);
+}
+
+export function unload() {
+    if (!native) return;
+    Bedrock.unrequire(native);
+    native = undefined;
 }

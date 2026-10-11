@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include <stdbool.h>
+#include <node_api.h>
 
 typedef struct WindowCustomization {
     HWND window;
@@ -10,6 +11,8 @@ typedef struct WindowCustomization {
     bool fullscreen;
     WINDOWPLACEMENT placement;
     LONG_PTR fullscreen_style;
+    napi_ref object;
+    struct WindowCustomization *next;
 } WindowCustomization;
 
 DWORD window_attach(WindowCustomization *state, HWND window);

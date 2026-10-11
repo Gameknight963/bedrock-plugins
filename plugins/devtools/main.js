@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-
 const { definePluginSettings, OptionType } = Bedrock;
-const require = createRequire(import.meta.url);
 
 export const settings = definePluginSettings({
     remoteDebugging: {
@@ -14,7 +11,7 @@ export const settings = definePluginSettings({
 });
 
 export function start(ctx) {
-    const { app } = require('electron');
+    const { app } = Bedrock.require('electron');
     if (settings.store.remoteDebugging) {
         if (app.isReady()) ctx.requireRestart('Restart Discord to enable remote debugging.');
         else app.commandLine.appendSwitch('remote-debugging-port', '9222');

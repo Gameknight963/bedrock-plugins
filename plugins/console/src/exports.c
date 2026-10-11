@@ -89,14 +89,32 @@ static napi_value filter(napi_env env, napi_callback_info info)
     return result(env);
 }
 
+static napi_value dispose(napi_env env, napi_callback_info info)
+{
+    (void)info;
+    if (filtering) {
+        SetStdHandle(STD_OUTPUT_HANDLE, saved_out);
+        SetStdHandle(STD_ERROR_HANDLE, saved_error);
+        CloseHandle(quiet);
+        quiet = INVALID_HANDLE_VALUE;
+        filtering = FALSE;
+    }
+    if (output != INVALID_HANDLE_VALUE) CloseHandle(output);
+    output = INVALID_HANDLE_VALUE;
+    HWND window = GetConsoleWindow();
+    if (window) ShowWindow(window, SW_HIDE);
+    return result(env);
+}
+
 NAPI_MODULE_INIT()
 {
     napi_property_descriptor methods[] = {
         { "show", NULL, show, NULL, NULL, NULL, napi_default, NULL },
         { "hide", NULL, hide, NULL, NULL, NULL, napi_default, NULL },
         { "write", NULL, write_text, NULL, NULL, NULL, napi_default, NULL },
-        { "filter", NULL, filter, NULL, NULL, NULL, napi_default, NULL }
+        { "filter", NULL, filter, NULL, NULL, NULL, napi_default, NULL },
+        { "dispose", NULL, dispose, NULL, NULL, NULL, napi_default, NULL }
     };
-    if (napi_define_properties(env, exports, 4, methods) != napi_ok) return NULL;
+    if (napi_define_properties(env, exports, 5, methods) != napi_ok) return NULL;
     return exports;
 }

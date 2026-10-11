@@ -4,6 +4,17 @@
 #include <string.h>
 #include "window.h"
 
+static WindowCustomization *customizations;
+
+static void forget(napi_env env, WindowCustomization *state)
+{
+    WindowCustomization **link = &customizations;
+    while (*link && *link != state) link = &(*link)->next;
+    if (*link) *link = state->next;
+    if (state->object) napi_delete_reference(env, state->object);
+    free(state);
+}
+
 static bool check(napi_env env, napi_status status)
 {
     if (status == napi_ok) return true;
@@ -18,6 +29,13 @@ static bool win32_check(napi_env env, DWORD error)
     sprintf_s(message, sizeof(message), "Cannot customize the window (Windows error %lu).", error);
     napi_throw_error(env, NULL, message);
     return false;
+}
+
+static bool get_state(napi_env env, napi_value object, WindowCustomization **state)
+{
+    napi_status status = napi_unwrap(env, object, (void **)state);
+    if (status == napi_invalid_arg || (status == napi_ok && !*state)) return win32_check(env, ERROR_INVALID_WINDOW_HANDLE);
+    return check(env, status);
 }
 
 static bool get_window(napi_env env, napi_value value, HWND *window)
@@ -49,7 +67,8 @@ static void finalize(napi_env env, void *data, void *hint)
     (void)env; (void)hint;
     // Never free a state that a live window subclass might still reference.
     window_dispose(state);
-    if (!state->window) free(state);
+    if (!state->window) forget(env, state);
+    else if (state->object) { napi_delete_reference(env, state->object); state->object = NULL; }
 }
 
 static napi_value update(napi_env env, napi_callback_info info)
@@ -60,7 +79,7 @@ static napi_value update(napi_env env, napi_callback_info info)
     bool titlebar, resize;
     if (!check(env, napi_get_cb_info(env, info, &argc, &argument, &self, NULL))) return NULL;
     if (argc != 1) { napi_throw_type_error(env, NULL, "Expected window options"); return NULL; }
-    if (!check(env, napi_unwrap(env, self, (void **)&state)) || !state) return NULL;
+    if (!get_state(env, self, &state)) return NULL;
     if (!get_options(env, argument, &titlebar, &resize) || !win32_check(env, window_update(state, titlebar, resize))) return NULL;
     return self;
 }
@@ -70,9 +89,31 @@ static napi_value dispose(napi_env env, napi_callback_info info)
     napi_value self;
     WindowCustomization *state;
     if (!check(env, napi_get_cb_info(env, info, NULL, NULL, &self, NULL))) return NULL;
-    if (!check(env, napi_unwrap(env, self, (void **)&state)) || !state) return NULL;
+    napi_status status = napi_unwrap(env, self, (void **)&state);
+    if (status == napi_invalid_arg) return self;
+    if (!check(env, status) || !state) return NULL;
     if (!win32_check(env, window_dispose(state))) return NULL;
+    if (!check(env, napi_remove_wrap(env, self, (void **)&state))) return NULL;
+    forget(env, state);
     return self;
+}
+
+static napi_value dispose_addon(napi_env env, napi_callback_info info)
+{
+    (void)info;
+    while (customizations) {
+        WindowCustomization *state = customizations;
+        if (!win32_check(env, window_dispose(state))) return NULL;
+        if (state->object) {
+            napi_value object;
+            if (!check(env, napi_get_reference_value(env, state->object, &object))) return NULL;
+            if (object && !check(env, napi_remove_wrap(env, object, NULL))) return NULL;
+        }
+        forget(env, state);
+    }
+    napi_value result;
+    if (!check(env, napi_get_undefined(env, &result))) return NULL;
+    return result;
 }
 
 static napi_value command(napi_env env, napi_callback_info info)
@@ -81,7 +122,7 @@ static napi_value command(napi_env env, napi_callback_info info)
     WindowCustomization *state;
     void *data;
     if (!check(env, napi_get_cb_info(env, info, NULL, NULL, &self, &data))) return NULL;
-    if (!check(env, napi_unwrap(env, self, (void **)&state)) || !state) return NULL;
+    if (!get_state(env, self, &state)) return NULL;
     if (!win32_check(env, window_command(state, (UINT)(UINT_PTR)data))) return NULL;
     return self;
 }
@@ -94,7 +135,7 @@ static napi_value fullscreen(napi_env env, napi_callback_info info)
     bool enabled;
     if (!check(env, napi_get_cb_info(env, info, &argc, &argument, &self, NULL))) return NULL;
     if (argc != 1) { napi_throw_type_error(env, NULL, "Expected a fullscreen boolean"); return NULL; }
-    if (!check(env, napi_unwrap(env, self, (void **)&state)) || !state ||
+    if (!get_state(env, self, &state) ||
         !check(env, napi_get_value_bool(env, argument, &enabled))) return NULL;
     if (!win32_check(env, window_fullscreen(state, enabled))) return NULL;
     return self;
@@ -110,7 +151,7 @@ static napi_value normal_bounds(napi_env env, napi_callback_info info)
     int coordinates[4];
     const char *names[] = { "x", "y", "width", "height" };
     if (!check(env, napi_get_cb_info(env, info, NULL, NULL, &self, NULL)) ||
-        !check(env, napi_unwrap(env, self, (void **)&state)) || !state ||
+        !get_state(env, self, &state) ||
         !win32_check(env, window_validate(state->window))) return NULL;
     if (state->fullscreen) placement = state->placement;
     else if (!GetWindowPlacement(state->window, &placement)) { win32_check(env, GetLastError()); return NULL; }
@@ -158,6 +199,9 @@ static napi_value customize(napi_env env, napi_callback_info info)
         !check(env, napi_wrap(env, object, state, finalize, NULL, NULL))) {
         finalize(env, state, NULL); return NULL;
     }
+    state->next = customizations;
+    customizations = state;
+    if (!check(env, napi_create_reference(env, object, 0, &state->object))) return NULL;
     if (!win32_check(env, window_update(state, titlebar, resize))) { window_dispose(state); return NULL; }
     return object;
 }
@@ -178,7 +222,8 @@ NAPI_MODULE_INIT()
 {
     napi_property_descriptor methods[] = {
         { "customize", NULL, customize, NULL, NULL, NULL, napi_default, NULL },
-        { "getStyle", NULL, get_style, NULL, NULL, NULL, napi_default, NULL }
+        { "getStyle", NULL, get_style, NULL, NULL, NULL, napi_default, NULL },
+        { "dispose", NULL, dispose_addon, NULL, NULL, NULL, napi_default, NULL }
     };
     if (!check(env, napi_define_properties(env, exports, sizeof(methods) / sizeof(methods[0]), methods))) return NULL;
     return exports;

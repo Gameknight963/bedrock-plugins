@@ -1,7 +1,5 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
 const { definePluginSettings, OptionType } = Bedrock;
+let native;
 
 export const settings = definePluginSettings({
     visible: { type: OptionType.BOOLEAN, label: 'Show console', default: true },
@@ -14,7 +12,7 @@ export const settings = definePluginSettings({
 });
 
 export function start(ctx) {
-    const native = require(`./native/${process.platform}-${process.arch}/console.node`);
+    native ||= Bedrock.require(`./native/${process.platform}-${process.arch}/console.node`, import.meta.url);
     const apply = () => {
         ctx.logs.configureFile({ enabled: settings.store.writeLogs, discord: settings.store.discordFileOutput });
         native.filter(!settings.store.discordOutput);
@@ -36,4 +34,10 @@ export function start(ctx) {
         });
     }
     apply();
+}
+
+export function unload() {
+    if (!native) return;
+    Bedrock.unrequire(native);
+    native = undefined;
 }
