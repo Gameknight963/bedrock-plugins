@@ -38,6 +38,6 @@ export function start(ctx) {
 
 export function unload() {
     if (!native) return;
-    Bedrock.unrequire(native);
+    Bedrock.unloadAddon(native);
     native = undefined;
 }
