@@ -1,6 +1,6 @@
 {
     "manifestVersion": 2,
-    "id": "bedrock.window-customization",
+    "id": "gameknight963.window-customization",
     "name": "Window Customization",
     "version": "1.0.1",
     "description": "Window transparency, native Windows title bars and resizable frames.",

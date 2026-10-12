@@ -1,6 +1,6 @@
 {
     "manifestVersion": 2,
-    "id": "bedrock.backdrop-blur-fix",
+    "id": "gameknight963.backdrop-blur-fix",
     "name": "Backdrop Blur Fix",
     "version": "0.1.1",
     "description": "Experimental replacement compositing for backdrop blur which fixes bleeding on transparent backgrounds.",

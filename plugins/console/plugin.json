@@ -1,6 +1,6 @@
 {
     "manifestVersion": 2,
-    "id": "bedrock.console",
+    "id": "gameknight963.console",
     "name": "Console",
     "version": "1.0.1",
     "description": "Show a console for Bedrock logs and choose whether to include Discord output.",
