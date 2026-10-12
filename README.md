@@ -8,7 +8,6 @@ Each plugin is licensed separately (see the `LICENSE` file in its folder). Repos
 
 - `plugins/` contains plugin source, manifests, READMEs, licenses and project files. Each plugin has one project, listed directly in `Plugins.slnx`.
 - `tools/Plugin.targets` provides the shared packaging target; the collection script creates ZIPs and generates the catalog.
-- `tests/` checks plugin behavior and packaging.
 - `sdk.json` pins the Bedrock source revision used as the build SDK.
 
 The Example plugin remains in Bedrock's `Examples` directory rather than the official collection.
@@ -26,8 +25,6 @@ Projects default to the v145 toolset. If you have Visual Studio 2022, pass `--to
 Pass `--sdk <path>` to use an existing Bedrock checkout. Replace <path> with its directory. The checkout must match the commit specified in sdk.json
 
 Packages appear in `.artifacts/packages`, ZIPs and `catalog.json` in `.artifacts/dist`. Each ZIP contains one plugin folder and includes its license and third-party notices. Build files and native source are excluded from packages.
-
-Run packaging tests with `python -m unittest discover -s tests -p "test_*.py"`. Plugin behavior tests use `node --test tests/*.test.cjs` after preparing the SDK (Node 24 is required)
 
 ## Adding a plugin
 
