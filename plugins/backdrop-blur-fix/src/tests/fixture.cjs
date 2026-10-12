@@ -13,7 +13,11 @@ const { createPluginManager } = require(path.join(core, 'Runtime/plugins.cjs'));
 const data = path.join(output, 'data');
 const folder = path.join(data, 'plugins', 'backdrop-blur-fix');
 fs.mkdirSync(folder, { recursive: true });
-fs.cpSync(path.join(collection, '.artifacts/packages/backdrop-blur-fix'), folder, { recursive: true });
+const copyPackage = () => {
+    fs.cpSync(path.join(collection, '.artifacts/packages/backdrop-blur-fix'), folder, { recursive: true });
+    if (process.env.BEDROCK_TEST_PLUGIN_DLL) fs.copyFileSync(process.env.BEDROCK_TEST_PLUGIN_DLL, path.join(folder, 'native/win32-x64/backdrop-blur-fix.dll'));
+};
+copyPackage();
 assert(!app.commandLine.hasSwitch('disable-gpu-sandbox'), 'Test must retain the GPU sandbox');
 app.setPath('userData', path.join(output, 'fixture-profile'));
 app.whenReady().then(async () => {
@@ -32,7 +36,7 @@ app.whenReady().then(async () => {
     let installed = 0;
     let failure;
     const manager = createPluginManager(data, {
-        nativeDirectory: path.join(packageRoot, 'Runtime/native/win32-x64'),
+        nativeDirectory: process.env.BEDROCK_TEST_NATIVE_DIRECTORY || path.join(packageRoot, 'Runtime/native/win32-x64'),
         symbolCacheDirectory: process.env.BEDROCK_TEST_SYMBOL_CACHE || path.join(output, 'cache', 'symbols'),
         nativeTargets: environment => environment === 'gpu' ? app.getAppMetrics().filter(metric => metric.type === 'GPU') : [],
         log(level, id, args) {
@@ -81,8 +85,23 @@ app.whenReady().then(async () => {
     assert(installed >= 3, 'Re-enabling did not reuse the mapped DLL');
     await window.webContents.executeJavaScript('document.querySelector(".blur").style.transform="translateX(0.01px)"');
     assert(alpha(await capture('native-reenabled')) < alpha(original), 'Re-enabled hook did not change rendering');
-    await manager.stopAll();
     console.log('Re-enabled mapped DLL successfully.');
+    await manager.setEnabled('bedrock.backdrop-blur-fix', false);
+    await manager.remove('bedrock.backdrop-blur-fix');
+    assert.equal(manager.pendingChanges().length, 0, 'Unload unexpectedly required a restart');
+    const uninstalled = await capture('native-uninstalled');
+    assert(alpha(uninstalled) === alpha(original), 'Uninstall did not restore the original blur');
+    copyPackage();
+    manager.scan();
+    await manager.setEnabled('bedrock.backdrop-blur-fix', true);
+    for (let attempt = 0; installed < 4 && !failure && attempt < 100; attempt++)
+        await new Promise(resolve => setTimeout(resolve, 100));
+    if (failure) throw failure;
+    assert(installed >= 4, 'Reinstall did not locate the restored functions');
+    await window.webContents.executeJavaScript('document.querySelector(".blur").style.transform="translateX(0.02px)"');
+    assert(alpha(await capture('native-reinstalled')) < alpha(original), 'Reinstalled hook did not change rendering');
+    await manager.remove('bedrock.backdrop-blur-fix');
+    console.log('PASS: unload and reinstall restored and re-hooked the functions in the same GPU process.');
 
     app.exit(0);
 }).catch(error => { console.error(error); app.exit(1); });

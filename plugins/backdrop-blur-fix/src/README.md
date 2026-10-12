@@ -36,7 +36,7 @@ Skia has already multiplied source pixels by layer opacity. The rounded clip sup
 
 Layers with combined filters, shader masks or split draw regions use the original implementation. Foreground content extending outside the backdrop shape remains a limitation of clipping the whole layer.
 
-Disabling switches the hooks to pass-through behavior. The DLL and trampolines stay loaded so rendering threads already executing them can return safely. A process restart releases them.
+Disabling switches the hooks to pass-through behavior. The DLL and trampolines stay loaded so rendering threads already executing them can return safely. Removing or replacing the package invokes `unload`, waits for active calls, disables all hooks and removes them individually with `MH_RemoveHook`. MinHook restores the original bytes and frees the trampolines. Late detour entries call the restored targets; their DLL and Windows TLS slots stay resident until process exit.
 
 ## Isolated test
 
@@ -46,6 +46,6 @@ Use a stock Electron 42.11.10 Windows x64 distribution in a scratch directory, w
 & 'path/to/fixture/Discord.exe' "$PWD/plugins/backdrop-blur-fix/src/tests/fixture.cjs" "$PWD/plugins/backdrop-blur-fix/src/obj/fixture"
 ```
 
-Set `BEDROCK_TEST_SYMBOL_CACHE` to an existing reference cache to reuse downloaded files. Otherwise the fixture prepares its own cache. The fixture expects a sibling `Bedrock` checkout; set `BEDROCK_CORE_ROOT` to use another checkout. It uses the collection package and defaults to the Release native host; set `BEDROCK_TEST_CONFIGURATION=Debug` to test Debug. The fixture uses its own profile and synthetic page. It verifies rounded corners, full/half/zero opacity, GPU process replacement, re-enabling the existing mapped DLL, and restoring the original image when the plugin stops. Captures are written under the supplied output directory. It does not open Discord or access its profile.
+Set `BEDROCK_TEST_SYMBOL_CACHE` to an existing reference cache to reuse downloaded files. Otherwise the fixture prepares its own cache. The fixture expects a sibling `Bedrock` checkout; set `BEDROCK_CORE_ROOT` to use another checkout. It uses the collection package and defaults to the Release native host; set `BEDROCK_TEST_CONFIGURATION=Debug` to test Debug. The fixture uses its own profile and synthetic page. It verifies rounded corners, full/half/zero opacity, GPU process replacement, re-enabling the existing mapped DLL, restoring the original image when the plugin stops, and uninstalling/reinstalling in the same GPU process. Captures are written under the supplied output directory. It does not open Discord or access its profile.
 
 The source reference is [Chromium 148's Skia renderer](https://github.com/chromium/chromium/blob/148.0.7778.0/components/viz/service/display/skia_renderer.cc), with [matching Skia](https://github.com/google/skia/tree/2085e414ce371c7f4ef5c86be341ef5428ac535b). Keep the included Chromium, Skia, MinHook notices with distributed plugin binaries; the shared host carries its manual mapper notice.

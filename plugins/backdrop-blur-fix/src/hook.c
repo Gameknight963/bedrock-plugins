@@ -28,9 +28,27 @@ static Clear original_clear;
 static Clip clip_path, clip_rect;
 static Arithmetic arithmetic;
 static unsigned char *prepare_address;
+static Blend blend_address;
+static Clear clear_address;
 static volatile LONG installed, enabled;
 static SRWLOCK control_lock = SRWLOCK_INIT;
 static DWORD active_slot = TLS_OUT_OF_INDEXES;
+static DWORD gate_slot = TLS_OUT_OF_INDEXES;
+
+static void enter_hook(void)
+{
+    uintptr_t depth = (uintptr_t)TlsGetValue(gate_slot);
+    // Prepare calls the other hooks recursively; acquiring SRW recursively can deadlock a waiting unload.
+    if (!depth) AcquireSRWLockShared(&control_lock);
+    TlsSetValue(gate_slot, (void *)(depth + 1));
+}
+
+static void leave_hook(void)
+{
+    uintptr_t depth = (uintptr_t)TlsGetValue(gate_slot) - 1;
+    TlsSetValue(gate_slot, (void *)depth);
+    if (!depth) ReleaseSRWLockShared(&control_lock);
+}
 
 static void release_blender(void *blender)
 {
@@ -41,11 +59,11 @@ static void release_blender(void *blender)
     }
 }
 
-static void blend_hook(unsigned char *paint, int mode)
+static void blend_hook_body(unsigned char *paint, int mode, void *caller)
 {
     ActiveLayer *active = TlsGetValue(active_slot);
     original_blend(paint, mode);
-    if (active && active->blender && mode == 3 && _ReturnAddress() == prepare_address + 0xaa) {
+    if (active && active->blender && mode == 3 && caller == prepare_address + 0xaa) {
         // setBlendMode(SrcOver) cleared fBlender. Transfer Skia's owned reference to that field.
         *(void **)(paint + 0x28) = active->blender;
         active->blender = NULL;
@@ -53,7 +71,7 @@ static void blend_hook(unsigned char *paint, int mode)
     }
 }
 
-static void clear_hook(const unsigned char *rpdq, void *canvas, const unsigned char *params)
+static void clear_hook_body(const unsigned char *rpdq, void *canvas, const unsigned char *params)
 {
     ActiveLayer *active = TlsGetValue(active_slot);
     if (!active || active->rpdq != rpdq || active->canvas != canvas)
@@ -61,7 +79,7 @@ static void clear_hook(const unsigned char *rpdq, void *canvas, const unsigned c
     // The outer clip already supplies coverage; clearing inside would apply rounded edges twice.
 }
 
-static void prepare_hook(void *renderer, const unsigned char *rpdq, unsigned char *params)
+static void prepare_hook_body(void *renderer, const unsigned char *rpdq, unsigned char *params)
 {
     InterlockedIncrement(&BlurCounters.calls);
     if (!InterlockedCompareExchange(&enabled, 0, 0) || !*(void *const *)(rpdq + 0x10)) {
@@ -95,6 +113,31 @@ static void prepare_hook(void *renderer, const unsigned char *rpdq, unsigned cha
     original_prepare(renderer, rpdq, params);
     TlsSetValue(active_slot, previous);
     release_blender(layer.blender);
+}
+
+static void blend_hook(unsigned char *paint, int mode)
+{
+    void *caller = _ReturnAddress();
+    enter_hook();
+    if (installed) blend_hook_body(paint, mode, caller);
+    else blend_address(paint, mode);
+    leave_hook();
+}
+
+static void clear_hook(const unsigned char *rpdq, void *canvas, const unsigned char *params)
+{
+    enter_hook();
+    if (installed) clear_hook_body(rpdq, canvas, params);
+    else clear_address(rpdq, canvas, params);
+    leave_hook();
+}
+
+static void prepare_hook(void *renderer, const unsigned char *rpdq, unsigned char *params)
+{
+    enter_hook();
+    if (installed) prepare_hook_body(renderer, rpdq, params);
+    else ((Prepare)prepare_address)(renderer, rpdq, params);
+    leave_hook();
 }
 
 static BOOL compatible_function(const unsigned char *function, const Signature *signature)
@@ -140,11 +183,12 @@ static DWORD install_hooks(const BedrockContext *context)
         return ERROR_REVISION_MISMATCH;
     }
     prepare_address = functions[0];
-    void *blend = functions[1], *clear = functions[2];
+    blend_address = (Blend)functions[1]; clear_address = (Clear)functions[2];
     arithmetic = (Arithmetic)functions[3]; clip_path = (Clip)functions[4]; clip_rect = (Clip)functions[5];
     BlurDiagnostics.stage = 1;
     if (active_slot == TLS_OUT_OF_INDEXES) active_slot = TlsAlloc();
-    if (active_slot == TLS_OUT_OF_INDEXES) return ERROR_NOT_ENOUGH_MEMORY;
+    if (gate_slot == TLS_OUT_OF_INDEXES) gate_slot = TlsAlloc();
+    if (active_slot == TLS_OUT_OF_INDEXES || gate_slot == TLS_OUT_OF_INDEXES) return ERROR_NOT_ENOUGH_MEMORY;
     BlurDiagnostics.stage = 2;
     MH_STATUS status = MH_Initialize();
     BlurDiagnostics.minhook_status = status;
@@ -153,11 +197,11 @@ static DWORD install_hooks(const BedrockContext *context)
     status = MH_CreateHook(prepare_address, (void *)prepare_hook, (void **)&original_prepare);
     if (status == MH_OK) {
         BlurDiagnostics.stage = 4;
-        status = MH_CreateHook(blend, (void *)blend_hook, (void **)&original_blend);
+        status = MH_CreateHook((void *)blend_address, (void *)blend_hook, (void **)&original_blend);
     }
     if (status == MH_OK) {
         BlurDiagnostics.stage = 5;
-        status = MH_CreateHook(clear, (void *)clear_hook, (void **)&original_clear);
+        status = MH_CreateHook((void *)clear_address, (void *)clear_hook, (void **)&original_clear);
     }
     if (status == MH_OK) {
         BlurDiagnostics.stage = 6;
@@ -182,12 +226,44 @@ __declspec(dllexport) DWORD WINAPI BlurInstall(const BedrockContext *context)
 __declspec(dllexport) DWORD WINAPI BlurRemove(void *unused)
 {
     (void)unused;
-    // Keep trampolines and the DLL resident so a render thread already inside a hook can return safely.
+    // Disabling retains the hooks for re-enabling; package unload removes them.
     AcquireSRWLockExclusive(&control_lock);
     InterlockedExchange(&enabled, 0);
     InterlockedExchange(&BlurCounters.enabled, 0);
     ReleaseSRWLockExclusive(&control_lock);
     return ERROR_SUCCESS;
+}
+
+__declspec(dllexport) DWORD WINAPI BlurUnload(void)
+{
+    AcquireSRWLockExclusive(&control_lock);
+    InterlockedExchange(&enabled, 0);
+    InterlockedExchange(&BlurCounters.enabled, 0);
+    MH_STATUS status = MH_OK;
+    if (installed) {
+        status = MH_DisableHook(MH_ALL_HOOKS);
+        if (status == MH_OK) {
+            status = MH_RemoveHook(prepare_address);
+            if (status == MH_OK || status == MH_ERROR_NOT_CREATED) {
+                original_prepare = (Prepare)prepare_address;
+                status = MH_RemoveHook((void *)blend_address);
+                if (status == MH_OK || status == MH_ERROR_NOT_CREATED) {
+                    original_blend = blend_address;
+                    status = MH_RemoveHook((void *)clear_address);
+                    if (status == MH_OK || status == MH_ERROR_NOT_CREATED) {
+                        original_clear = clear_address;
+                        InterlockedExchange(&installed, 0);
+                        status = MH_Uninitialize();
+                    }
+                }
+            }
+        }
+    }
+    BlurDiagnostics.minhook_status = status;
+    // A thread can have entered the detour before taking the shared lock. Keep DLL/TLS resident;
+    // after removal those late calls use the restored target, never the freed trampoline.
+    ReleaseSRWLockExclusive(&control_lock);
+    return status == MH_OK ? ERROR_SUCCESS : ERROR_DLL_INIT_FAILED;
 }
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)

@@ -5,6 +5,7 @@
 
 DWORD WINAPI BlurInstall(const BedrockContext *context);
 DWORD WINAPI BlurRemove(void *unused);
+DWORD WINAPI BlurUnload(void);
 extern BlurInstallDiagnostic BlurDiagnostics;
 static const BedrockContext *context;
 
@@ -58,8 +59,19 @@ static void BEDROCK_CALL stop(void)
     context = NULL;
 }
 
+static BedrockResult BEDROCK_CALL unload(const BedrockContext *host)
+{
+    DWORD result = BlurUnload();
+    if (!result) return BEDROCK_OK;
+    char message[256] = "Could not remove the blur hooks: ";
+    lstrcatA(message, MH_StatusToString((MH_STATUS)BlurDiagnostics.minhook_status));
+    lstrcatA(message, ". Restart Discord to finish unloading the plugin.");
+    host->log(host->host, BEDROCK_LOG_ERROR, message);
+    return BEDROCK_ERROR;
+}
+
 static const BedrockPlugin plugin = {
-    .size = sizeof(BedrockPlugin), .required_api = {1, 1, 0},
-    .start = start, .stop = stop
+    .size = sizeof(BedrockPlugin), .required_api = {1, 4, 0},
+    .start = start, .stop = stop, .flags = BEDROCK_PLUGIN_REQUIRES_SYMBOLS, .unload = unload
 };
 BEDROCK_EXPORT const BedrockPlugin *BEDROCK_CALL Bedrock_GetPlugin(void) { return &plugin; }
