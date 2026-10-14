@@ -4,6 +4,7 @@ Each plugin has its own license. Dependency notices are included in the correspo
 
 | Plugin | Dependency | License file in package |
 | --- | --- | --- |
+| YouTube Adblock | Vencord/Equicord and AdGuard Block YouTube Ads | `LICENSE` (GPL-3.0-or-later), `NOTICE` |
 | Console | Node.js Node-API headers | `native/win32-x64/Node-API-LICENSE.txt` |
 | Window Customization | Node.js Node-API headers | `native/win32-x64/Node-API-LICENSE.txt` |
 | Window Customization | Titlebar For Everyone by Ingan121 | `native/win32-x64/Titlebar-For-Everyone-LICENSE.txt` |

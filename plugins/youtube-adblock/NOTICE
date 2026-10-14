@@ -1,0 +1,11 @@
+YouTube Adblock for Bedrock
+
+Adapted from YoutubeAdblock in Equicord, commit e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/youtubeAdblock.desktop
+
+Original plugin: Copyright (c) 2023 Vendicated and contributors; authors ImLvna and Vendicated.
+AdGuard script: Copyright (C) AdGuard Team.
+https://github.com/AdguardTeam/BlockYouTubeAdsShortcut
+
+Both are licensed under GPL-3.0-or-later. Full license text is in LICENSE.
+Bedrock modifications (2026-10-12): plugin lifecycle, host validation, frame discovery and reversible script hooks, styles, observers and timers.
