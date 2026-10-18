@@ -12,4 +12,5 @@
   <Project Path="plugins/silent-typing/SilentTyping.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/media-playback-speed/MediaPlaybackSpeed.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/picture-in-picture/PictureInPicture.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/voice-download/VoiceDownload.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>

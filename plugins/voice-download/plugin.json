@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 2,
+    "id": "gameknight963.voice-download",
+    "name": "Voice Download",
+    "version": "1.0.0",
+    "description": "Add download links to voice messages and audio attachments.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.1.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
