@@ -1,6 +1,6 @@
 # Bedrock plugins
 
-The official plugin collection for [Bedrock](https://github.com/bedrock-client/Bedrock). Plugins are maintained here and packaged independently of the launcher.
+The official plugin collection for [Bedrock](https://github.com/Gameknight963/Bedrock). Plugins are maintained here and packaged independently of the launcher.
 
 Each plugin is licensed separately (see the `LICENSE` file in its folder). Repository tooling and collection documentation are licensed under MIT.
 
