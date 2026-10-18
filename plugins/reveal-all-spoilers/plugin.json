@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 2,
+    "id": "gameknight963.reveal-all-spoilers",
+    "name": "Reveal All Spoilers",
+    "version": "1.0.0",
+    "description": "Ctrl-click a text spoiler to reveal the others in its message.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.1.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}

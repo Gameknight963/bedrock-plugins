@@ -8,4 +8,5 @@
   <Project Path="plugins/youtube-adblock/YouTubeAdblock.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-f1/NoF1.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/f8-break/F8Break.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/reveal-all-spoilers/RevealAllSpoilers.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
