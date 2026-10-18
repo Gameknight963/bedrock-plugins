@@ -95,7 +95,7 @@ The DLL exports `Bedrock_GetPlugin`, which declares its lifecycle callbacks. The
 
 Disabling switches the hooks to their original behavior. The DLL and trampolines remain in memory so threads already executing a hook can finish safely; those hooks do not access the plugin context. Re-enabling reuses the loaded DLL. Removing or replacing the package calls its unload callback, which waits for active hook calls, disables the hooks, removes each one with `MH_RemoveHook`, and releases MinHook's trampolines. The original function bytes are restored so a newly installed copy can resolve them again. The mapped DLL and TLS slots remain resident for any late detour entries; those calls use the restored functions. Exiting the GPU process releases that memory.
 
-If Electron restarts the GPU process, Bedrock loads the entrypoint into its replacement. Technical details are in [the native README](https://github.com/bedrock-client/bedrock-plugins/blob/main/plugins/backdrop-blur-fix/src/README.md).
+If Electron restarts the GPU process, Bedrock loads the entrypoint into its replacement. Technical details are in [the native README](https://github.com/Gameknight963/bedrock-plugins/blob/main/plugins/backdrop-blur-fix/src/README.md).
 
 ## Current limitations
 

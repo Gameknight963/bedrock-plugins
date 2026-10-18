@@ -1,6 +1,6 @@
 # Native backdrop blur experiment
 
-The collection build produces `backdrop-blur-fix.dll` and includes it and its notices in the plugin package. The DLL is written in C and statically links MinHook. It exports the [Bedrock C plugin API](https://github.com/bedrock-client/Bedrock/blob/62ec664c173a306ad485d8f984435cb31a8382f3/include/README.md), with a GPU entrypoint declared in its manifest.
+The collection build produces `backdrop-blur-fix.dll` and includes it and its notices in the plugin package. The DLL is written in C and statically links MinHook. It exports the [Bedrock C plugin API](https://github.com/Gameknight963/Bedrock/blob/62ec664c173a306ad485d8f984435cb31a8382f3/include/README.md), with a GPU entrypoint declared in its manifest.
 
 ## Lifecycle and diagnostics
 

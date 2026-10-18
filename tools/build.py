@@ -137,7 +137,7 @@ def main():
                 tree.update(b"\0")
         records.append({"manifest": manifest, "license": manifest.get("license"), "readme": (output / manifest.get("readme", "README.md")).read_text(),
             "package": {"url": args.base_url.rstrip("/") + "/" + filename if args.base_url else filename, "sha256": checksum, "size": (dist / filename).stat().st_size},
-            "source": {"repository": "https://github.com/bedrock-client/bedrock-plugins", "commit": revision, "path": f"plugins/{folder.name}", "treeSha256": tree.hexdigest()}})
+            "source": {"repository": "https://github.com/Gameknight963/bedrock-plugins", "commit": revision, "path": f"plugins/{folder.name}", "treeSha256": tree.hexdigest()}})
     subprocess.run(["node", str(ROOT / "tools/validate.cjs"), str(sdk), str(artifacts / "packages")], check=True)
     catalog = {"catalogVersion": 1, "sdk": json.loads((ROOT / "sdk.json").read_text()), "plugins": records}
     (dist / "catalog.json").write_text(json.dumps(catalog, indent=2) + "\n", encoding="utf-8")
