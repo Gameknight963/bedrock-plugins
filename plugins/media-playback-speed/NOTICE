@@ -1,0 +1,9 @@
+Media Playback Speed for Bedrock
+
+Adapted from Vencord/Equicord MediaPlaybackSpeed.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/equicordplugins/mediaPlaybackSpeed
+
+Copyright (c) 2024 Vendicated and contributors; original authors: D3SOX.
+GPL-3.0-or-later. Full license text is in LICENSE.
+
+Modified for Bedrock on 2026-10-17: runtime integration, lifecycle cleanup and controls/settings described in README.md.

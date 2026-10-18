@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 2,
+    "id": "gameknight963.media-playback-speed",
+    "name": "Media Playback Speed",
+    "version": "1.0.0",
+    "description": "Set default playback speeds and change individual media embeds.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.1.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}

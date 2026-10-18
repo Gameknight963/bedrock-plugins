@@ -13,4 +13,4 @@ Each plugin has its own license. Dependency notices are included in the correspo
 
 Node-API headers and MinHook source come from the Bedrock SDK revision pinned in `sdk.json`. Titlebar For Everyone's MIT-licensed [source](https://github.com/ramensoftware/windhawk-mods/blob/main/mods/titlebar-for-everyone.wh.cpp) is credited in the Window Customization README. Chromium and Skia references are described in the Backdrop Blur Fix README.
 
-The following GPL-3.0-or-later ports include their Vencord/Equicord source references, original authors and modifications in each package's `NOTICE`, alongside the full `LICENSE`: No F1, F8 Break, Reveal All Spoilers and Silent Typing.
+The following GPL-3.0-or-later ports include their Vencord/Equicord source references, original authors and modifications in each package's `NOTICE`, alongside the full `LICENSE`: No F1, F8 Break, Reveal All Spoilers, Silent Typing and Media Playback Speed.
