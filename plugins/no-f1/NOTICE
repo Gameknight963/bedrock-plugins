@@ -1,0 +1,9 @@
+No F1 for Bedrock
+
+Adapted from Vencord/Equicord NoF1.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/noF1
+
+Copyright (c) 2022 Vendicated and contributors; original authors: Cyn.
+GPL-3.0-or-later. Full license text is in LICENSE.
+
+Modified for Bedrock on 2026-10-17: runtime integration, lifecycle cleanup and controls/settings described in README.md.

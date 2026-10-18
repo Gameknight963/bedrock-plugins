@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 2,
+    "id": "gameknight963.no-f1",
+    "name": "No F1",
+    "version": "1.0.0",
+    "description": "Disable the F1 help shortcut.",
+    "entrypoints": {
+        "main": {
+            "runtime": "javascript",
+            "path": "main.js",
+            "requiresApi": "1.1.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
