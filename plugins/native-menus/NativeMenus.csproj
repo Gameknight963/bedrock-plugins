@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>NativeMenus</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <BedrockSdkRoot Condition="'$(BedrockSdkRoot)' == ''">$(MSBuildThisFileDirectory)..\..\.sdk\bedrock</BedrockSdkRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="$(BedrockSdkRoot)\Managed\Desktop\Bedrock.Desktop.csproj" Private="false" /></ItemGroup>
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <PluginFile Include="plugin.json;README.md;LICENSE;package.json;renderer.js;menu.js" />
+      <PluginFile Include="$(TargetPath)"><PackagePath>NativeMenus.dll</PackagePath></PluginFile>
+      <PluginFile Include="$(TargetDir)$(TargetName).deps.json"><PackagePath>NativeMenus.deps.json</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
+</Project>
