@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 2,
+    "id": "gameknight963.fix-spotify-embeds",
+    "name": "Fix Spotify Embeds",
+    "version": "1.0.0",
+    "description": "Control the volume of Spotify embed previews.",
+    "entrypoints": {
+        "main": {
+            "runtime": "javascript",
+            "path": "main.js",
+            "requiresApi": "1.1.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}

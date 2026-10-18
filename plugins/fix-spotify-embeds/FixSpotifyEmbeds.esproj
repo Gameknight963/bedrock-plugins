@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.6887863">
+  <PropertyGroup>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunNpmAudit>false</ShouldRunNpmAudit>
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <PluginFile Include="plugin.json"><PackagePath>plugin.json</PackagePath></PluginFile>
+      <PluginFile Include="README.md"><PackagePath>README.md</PackagePath></PluginFile>
+      <PluginFile Include="LICENSE"><PackagePath>LICENSE</PackagePath></PluginFile>
+      <PluginFile Include="NOTICE"><PackagePath>NOTICE</PackagePath></PluginFile>
+      <PluginFile Include="package.json"><PackagePath>package.json</PackagePath></PluginFile>
+      <PluginFile Include="main.js"><PackagePath>main.js</PackagePath></PluginFile>
+      <PluginFile Include="player.js"><PackagePath>player.js</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
+</Project>
