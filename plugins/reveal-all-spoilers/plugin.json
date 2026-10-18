@@ -1,8 +1,8 @@
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "gameknight963.reveal-all-spoilers",
     "name": "Reveal All Spoilers",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Ctrl-click a text spoiler to reveal the others in its message.",
     "entrypoints": {
         "renderer": {

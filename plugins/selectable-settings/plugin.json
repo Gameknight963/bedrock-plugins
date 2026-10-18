@@ -1,8 +1,8 @@
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "gameknight963.selectable-settings",
     "name": "Selectable Settings",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Select and copy text throughout Discord settings.",
     "entrypoints": {
         "renderer": {

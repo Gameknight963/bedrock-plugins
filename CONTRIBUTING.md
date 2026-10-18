@@ -24,7 +24,7 @@ For a JavaScript plugin that runs in Discord's interface, `plugin.json` looks li
 
 ```json
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "example-author.selectable-settings",
     "name": "Selectable Settings",
     "version": "1.0.0",
@@ -46,6 +46,8 @@ For a JavaScript plugin that runs in Discord's interface, `plugin.json` looks li
 - `renderer` runs in Discord's interface. Use `main` with a path such as `main.js` for Electron's main process, or declare both if the plugin needs both.
 - Each entry point declares its runtime and a path relative to the installed plugin folder. For JavaScript, `requiresApi` declares the Bedrock API version the plugin needs.
 - `readme` identifies the Markdown file shown in the plugin details. `license` identifies the plugin's license; include the full text in `LICENSE`.
+
+For desktop C# plugins, use `"runtime": "dotnet"` on the main entry point and reference `Managed/Desktop/Bedrock.Desktop.csproj` from the SDK. Browser C# entry points use `"runtime": "dotnet-wasm"` in the renderer. Both declare the entry class and API requirement in an assembly-level `BedrockPlugin` attribute.
 
 For a native plugin, use `"runtime": "native"` and the packaged DLL path. [backdrop-blur-fix](plugins/backdrop-blur-fix) is a good reference to use to help you set up a native plugin, as I haven't yet documented the process  of creating one fully.
 

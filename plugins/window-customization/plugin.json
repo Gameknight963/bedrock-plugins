@@ -1,8 +1,8 @@
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "gameknight963.window-customization",
     "name": "Window Customization",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Window transparency, native Windows title bars and resizable frames.",
     "entrypoints": {
         "main": {

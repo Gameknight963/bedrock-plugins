@@ -1,8 +1,8 @@
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "gameknight963.no-f1",
     "name": "No F1",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Disable the F1 help shortcut.",
     "entrypoints": {
         "main": {

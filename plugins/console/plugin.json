@@ -1,8 +1,8 @@
 {
-    "manifestVersion": 2,
+    "manifestVersion": 3,
     "id": "gameknight963.console",
     "name": "Console",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Show a console for Bedrock logs and choose whether to include Discord output.",
     "entrypoints": {
         "main": {

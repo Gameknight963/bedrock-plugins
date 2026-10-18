@@ -44,7 +44,7 @@ def find_msbuild():
 
 def package(folder):
     manifest = json.loads((folder / "plugin.json").read_text(encoding="utf-8"))
-    if manifest.get("manifestVersion") != 2 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", manifest.get("id", "")):
+    if manifest.get("manifestVersion") != 3 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", manifest.get("id", "")):
         raise ValueError(f"Invalid manifest in {folder.name}")
     if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?", manifest.get("version", "")):
         raise ValueError(f"Invalid version in {folder.name}")
@@ -52,7 +52,7 @@ def package(folder):
         if not (folder / required).is_file():
             raise ValueError(f"{folder.name} must package {required}")
     for entry in manifest.get("entrypoints", {}).values():
-        if entry.get("runtime") not in {"javascript", "native", "dotnet"} or not contained(folder, entry.get("path")).is_file():
+        if entry.get("runtime") not in {"javascript", "native", "dotnet-wasm", "dotnet"} or not contained(folder, entry.get("path")).is_file():
             raise ValueError(f"{folder.name} does not package its declared entry point")
     if not manifest.get("entrypoints") or not contained(folder, manifest.get("readme", "README.md")).is_file():
         raise ValueError(f"Invalid entry points or README in {folder.name}")
