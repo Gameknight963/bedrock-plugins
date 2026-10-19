@@ -751,7 +751,7 @@ export const plugin: any = {
 
     patches: [
         { find: "}renderStickersAccessories(", replacement: {
-            match: /(?<=this.props,\i,\[)"message",/, replace: ""
+            match: /(?<=this.props,\i,\[)(?:"message",)?/, replace: ""
         } },
         {
             find: '"MessageStore"',

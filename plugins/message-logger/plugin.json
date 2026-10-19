@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.message-logger",
     "name": "Message Logger",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Keep deleted messages and view earlier versions of edited messages.",
     "entrypoints": {
         "renderer": {
