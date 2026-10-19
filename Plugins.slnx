@@ -58,4 +58,27 @@
   <Project Path="plugins/copy-file-contents/CopyFileContents.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/always-animate/AlwaysAnimate.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/more-quick-reactions/MoreQuickReactions.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/account-panel-server-profile/AccountPanelServerProfile.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-role-dot/BetterRoleDot.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/bigger-stream-preview/BiggerStreamPreview.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/call-timer/CallTimer.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/follow-voice-user/FollowVoiceUser.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/force-owner-crown/ForceOwnerCrown.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/full-user-in-chatbox/FullUserinChatbox.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/game-activity-toggle/GameActivityToggle.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/member-count/MemberCount.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/message-click-actions/MessageClickActions.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/notification-volume/NotificationVolume.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/preview-message/PreviewMessage.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/quick-reply/QuickReply.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/reply-timestamp/ReplyTimestamp.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/show-timeout-duration/ShowTimeoutDuration.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/silent-message-toggle/SilentMessageToggle.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/spotify-crack/SpotifyCrack.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/streamer-mode-on-stream/StreamerModeOnStream.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/streaming-codec-disabler/StreamingCodecDisabler.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/unlocked-avatar-zoom/UnlockedAvatarZoom.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/valid-reply/ValidReply.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/voice-chat-double-click/VoiceChatDoubleClick.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/volume-booster/VolumeBooster.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
