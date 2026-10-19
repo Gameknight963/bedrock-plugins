@@ -16,6 +16,10 @@ Use a CSS theme with transparent backgrounds in Bedrock's Themes page. The trans
 
 The implementation details below refer to Electron 42.11.8, the version used by Discord when this plugin was developed. Source links are pinned to that version.
 
+### Drag regions
+
+Discord uses CSS `app-region: drag` to make parts of its interface draggable. While the native title bar is enabled, the plugin overrides those regions with `no-drag`, leaving dragging to the Windows caption. Chromium checks CSS drag regions internally as well as through Windows hit-testing; a region covering the content can otherwise intercept clicks even when our native handler reports ordinary client area.
+
 ### Transparency
 
 The plugin changes Electron's window creation options to enable transparency, set a transparent background, and remove the frame, which Electron requires for transparency on Windows. These options must be set before the window is created, so changing transparency requires a restart. The native title bar and resizable frame settings can add their styles afterward.

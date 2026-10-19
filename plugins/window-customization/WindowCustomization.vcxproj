@@ -56,6 +56,7 @@
   <ItemGroup>
     <None Include="LICENSE" />
     <None Include="main.js" />
+    <None Include="renderer.js" />
     <None Include="package.json" />
     <None Include="plugin.json" />
     <None Include="README.md" />
@@ -68,6 +69,7 @@
       <PluginFile Include="README.md"><PackagePath>README.md</PackagePath></PluginFile>
       <PluginFile Include="LICENSE"><PackagePath>LICENSE</PackagePath></PluginFile>
       <PluginFile Include="main.js"><PackagePath>main.js</PackagePath></PluginFile>
+      <PluginFile Include="renderer.js"><PackagePath>renderer.js</PackagePath></PluginFile>
       <PluginFile Include="$(TargetPath)"><PackagePath>native\win32-x64\window.node</PackagePath></PluginFile>
       <PluginFile Include="Titlebar-For-Everyone-LICENSE.txt"><PackagePath>native\win32-x64\Titlebar-For-Everyone-LICENSE.txt</PackagePath></PluginFile>
       <PluginFile Include="package.json"><PackagePath>package.json</PackagePath></PluginFile>
