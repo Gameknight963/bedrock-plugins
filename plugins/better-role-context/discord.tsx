@@ -74,7 +74,9 @@ export function copyToClipboard(value: string): void {
 }
 export function captureDeveloperMode(setting: typeof developerMode): typeof developerMode {
     developerMode = setting;
-    if (isActive()) enableDeveloperMode();
+    const activation = context;
+    // The capture runs inside Discord's setting initializer; let that module finish first.
+    queueMicrotask(() => { if (isActive(activation)) enableDeveloperMode(); });
     return setting;
 }
 export function enableDeveloperMode(): void {
