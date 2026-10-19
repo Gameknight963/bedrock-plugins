@@ -135,7 +135,10 @@ def main():
                 tree.update(b"\0")
                 tree.update(file.read_bytes())
                 tree.update(b"\0")
+        notices = [(name, (output / name).read_text(encoding="utf-8")) for name in ["NOTICE", "NOTICE.md", "THIRD_PARTY_NOTICES.md"] if (output / name).is_file()]
         records.append({"manifest": manifest, "license": manifest.get("license"), "readme": (output / manifest.get("readme", "README.md")).read_text(),
+            "documents": {"license": (output / "LICENSE").read_text(encoding="utf-8"),
+                "notices": "\n\n".join(f"{name}\n\n{text}" if len(notices) > 1 else text for name, text in notices)},
             "package": {"url": args.base_url.rstrip("/") + "/" + filename if args.base_url else filename, "sha256": checksum, "size": (dist / filename).stat().st_size},
             "source": {"repository": "https://github.com/Gameknight963/bedrock-plugins", "commit": revision, "path": f"plugins/{folder.name}", "treeSha256": tree.hexdigest()}})
     subprocess.run(["node", str(ROOT / "tools/validate.cjs"), str(sdk), str(artifacts / "packages")], check=True)

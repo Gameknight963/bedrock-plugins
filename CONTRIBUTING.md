@@ -46,6 +46,7 @@ For a JavaScript plugin that runs in Discord's interface, `plugin.json` looks li
 - `renderer` runs in Discord's interface. Use `main` with a path such as `main.js` for Electron's main process, or declare both if the plugin needs both.
 - Each entry point declares its runtime and a path relative to the installed plugin folder. For JavaScript, `requiresApi` declares the Bedrock API version the plugin needs.
 - `readme` identifies the Markdown file shown in the plugin details. `license` identifies the plugin's license; include the full text in `LICENSE`.
+- The **License** tab displays the packaged `LICENSE`. The **Notices** tab displays `NOTICE`, `NOTICE.md`, and `THIRD_PARTY_NOTICES.md` when present. Include those files in your project's `PluginFile` items; the catalog also carries their contents for browsing before installation.
 
 For desktop C# plugins, use `"runtime": "dotnet"` on the main entry point and reference `Managed/Desktop/Bedrock.Desktop.csproj` from the SDK. Browser C# entry points use `"runtime": "dotnet-wasm"` in the renderer. Both declare the entry class and API requirement in an assembly-level `BedrockPlugin` attribute.
 
