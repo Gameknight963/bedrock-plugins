@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.member-count",
+    "name": "Member Count",
+    "version": "1.0.0",
+    "description": "Show online, total and voice member counts in the member list and server tooltips.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.5.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
