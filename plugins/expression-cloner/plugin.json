@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.expression-cloner",
     "name": "Expression Cloner",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Clone emoji and stickers to your servers from their context menus.",
     "entrypoints": {
         "renderer": {

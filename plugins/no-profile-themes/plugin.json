@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.no-profile-themes",
     "name": "No Profile Themes",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Remove Nitro profile themes from everyone except yourself.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.reverse-image-search",
     "name": "Reverse Image Search",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Search for an image using its context menu.",
     "entrypoints": {
         "renderer": {

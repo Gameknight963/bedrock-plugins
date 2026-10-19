@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.disable-call-idle",
     "name": "Disable Call Idle",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Disable automatic call disconnection and idle AFK moves.",
     "entrypoints": {
         "renderer": {
