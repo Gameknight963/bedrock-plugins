@@ -1,0 +1,9 @@
+Better GIF Alt Text for Bedrock
+
+Adapted from Vencord/Equicord BetterGifAltText.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/betterGifAltText
+
+Copyright (c) 2022 Vendicated and contributors; original authors: Vendicated.
+GPL-3.0-or-later. Full license text is in LICENSE.
+
+Modified for Bedrock on 2026-10-18: runtime integration and lifecycle cleanup.

@@ -15,4 +15,5 @@
   <Project Path="plugins/voice-download/VoiceDownload.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/fix-spotify-embeds/FixSpotifyEmbeds.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/native-menus/NativeMenus.csproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-gif-alt-text/BetterGifAltText.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
