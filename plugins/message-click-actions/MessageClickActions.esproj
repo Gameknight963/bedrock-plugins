@@ -8,7 +8,7 @@
   <Import Project="..\..\tools\TypeScript.targets" />
   <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
     <ItemGroup>
-      <PluginFile Include="plugin.json;README.md;LICENSE;NOTICE;package.json;styles.css" />
+      <PluginFile Include="plugin.json;README.md;LICENSE;NOTICE;package.json;styles.css;main.js" />
       <_CompiledScript Include="obj/runtime/*.js" />
       <PluginFile Include="@(_CompiledScript)"><PackagePath>%(_CompiledScript.Filename)%(_CompiledScript.Extension)</PackagePath></PluginFile>
     </ItemGroup>

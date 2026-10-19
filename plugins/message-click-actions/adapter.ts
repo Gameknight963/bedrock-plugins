@@ -32,7 +32,11 @@ export function copyWithToast(text: string, title: string): void {
     void navigator.clipboard.writeText(text).then(() => { if (activation && !activation.signal.aborted) activation.notifications.show({ title, type: 'success' }); }).catch(error => activation?.log.error('Could not copy to the clipboard.', error));
 }
 export function insertTextIntoChatInputBox(content: string): void { find(v => typeof v?.dispatchToLastSubscribed === 'function').dispatchToLastSubscribed('INSERT_TEXT', { plainText: content }); }
-export function openExternal(url: string): void { window.open(url, '_blank', 'noopener'); }
+export function openExternal(url: string): void {
+    const activation = context;
+    if (!activation || activation.signal.aborted) return;
+    void activation.events.emit('message-click-actions.open-external', url).catch(error => activation.log.error('Could not open the message in your browser.', error));
+}
 function replyPlugin(): { enabled: boolean; settings: Record<string, any> } | undefined {
     return (Bedrock as unknown as { plugins: { list(): Array<{ manifest: { id: string }; enabled: boolean; settings: Record<string, any> }> } }).plugins.list().find(plugin => plugin.manifest.id === 'gameknight963.no-reply-mention');
 }
