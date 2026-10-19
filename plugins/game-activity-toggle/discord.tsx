@@ -35,7 +35,13 @@ export const ShowCurrentGame: any = new Proxy({}, { get(_target, key) {
     return value[key].bind(value);
 } });
 export const Menu: any = new Proxy({}, { get: (_target, key) => find(value => value?.MenuCheckboxItem && value?.Menu)[key] });
-export function Popout(props: any): any { return React.createElement(find(value => value?.Popout && value?.Tooltip).Popout, props); }
+export function Popout(props: any): any {
+    const Native = find(value => {
+        const source = String(value?.render ?? value);
+        return source.includes('ref:this.ref,') && source.includes('renderPopout:this.renderPopout,');
+    });
+    return React.createElement(Native, props);
+}
 export const Button: any = { $$typeof: Symbol.for('react.forward_ref'), render(props: any, ref: any): any {
     const Native = find(value => (typeof value === 'function' || typeof value?.render === 'function') && String(value.render ?? value).includes('.GREEN,positionKeyStemOverride:'));
     return React.createElement(Native, { ...props, ref });

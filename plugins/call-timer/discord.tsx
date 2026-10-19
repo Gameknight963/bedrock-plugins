@@ -59,7 +59,7 @@ export function formatDurationMs(ms: number, human: boolean = false, seconds: bo
 }
 
 export function Tooltip(props: any): any {
-    const Native = find(value => typeof value?.Tooltip === 'function').Tooltip;
+    const Native = find(value => typeof value === 'function' && value.prototype?.shouldShowTooltip && value.prototype?.render);
     return React.createElement(Native, props);
 }
 let Boundary: any;
