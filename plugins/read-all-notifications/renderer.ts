@@ -7,7 +7,7 @@ interface GuildChannels { SELECTABLE?: ChannelEntry[]; VOCAL?: ChannelEntry[] }
 interface ReadStates { hasUnread(id: string): boolean; lastMessageId(id: string): string | null }
 let context: RendererContext;
 export const patches: SourcePatch[] = [{ id: 'server-list-read-all-button', find: 'Be8Q5E', replacement: {
-    match: /(?<=Be8Q5E.+?return)(\(.{0,150}?tutorialId:"friends-list".+?}\))(?=}function)/,
+    match: /(?<=Be8Q5E.+?return)([\[(].{0,150}?tutorialId:"friends-list".+?)(?=}function)/,
     replace: '[$1,$self.renderReadAllButton()]'
 } }];
 
