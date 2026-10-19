@@ -1,0 +1,10 @@
+Custom Idle for Bedrock
+
+Adapted from Vencord/Equicord CustomIdle by newwares, with the NoticesAPI integration by Vendicated.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/customIdle
+https://github.com/Equicord/Equicord/blob/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/api/Notices.tsx
+
+Copyright (c) 2022, 2024 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
