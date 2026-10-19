@@ -68,14 +68,14 @@ export function normalizePatches(original: any[]): SourcePatch[] {
     const extra = [
         { find: '#{intl::GUILD_OWNER}),children:', replacement: { match: /children:\[(?=.{0,300},lostPermissionTooltipText:)/,
             replace: 'children:[$self.renderMembers(arguments[0]),' } },
-        { find: 'PrivateChannel.renderAvatar', replacement: { match: /decorators:(\i\.isSystemDM\(\)\?.{0,100}:null)/,
-            replace: 'decorators:[$self.renderMembers(arguments[0]),$1]' } },
+        { find: 'PrivateChannel.renderAvatar', replacement: { match: /(\i\.isSystemDM\(\)\?.{0,100}:null)/,
+            replace: '[$self.renderMembers(arguments[0]),$1]' } },
         { find: '#{intl::GUILD_COMMUNICATION_DISABLED_ICON_TOOLTIP_BODY}', replacement: {
             match: /#{intl::GUILD_COMMUNICATION_DISABLED_BOTTOM_SHEET_TITLE}.+?renderPopout:.+?(?=\])/,
             replace: '$&,$self.renderMessages(arguments[0])' } },
         { find: '#{intl::USER_PROFILE_PRONOUNS}', replacement: [
-            { match: /(?<=children:\i\}\):\i,)null!=\i/, replace: '($&||!!$self.renderNicknameIcons({userId:arguments[0].user?.id})?.length)' },
-            { match: /(?<=shouldUnderlineOnHover:null.{0,300})children:(\i)(?=\}\)\])/,
+            { match: /(?<=children:(?:\i|\[\.\.\..+?\])\}\):\i,\(?)null!=\i/, replace: '($&||!!$self.renderNicknameIcons({userId:arguments[0].user?.id})?.length)' },
+            { match: /(?<=shouldUnderlineOnHover:null.{0,2000})children:(\i|\[\.\.\..+?\])(?=\}\)\])/,
                 replace: 'children:[...$self.renderNicknameIcons({userId:arguments[0].user?.id}),$1]' }
         ] },
         { find: '.5625*', replacement: { match: /(?=}\s*$)/, replace: ';$self.captureColors(arguments[0].exports);' } }
