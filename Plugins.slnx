@@ -96,4 +96,8 @@
   <Project Path="plugins/typing-tweaks/TypingTweaks.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/blur-nsfw/BlurNSFW.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-typing-animation/NoTypingAnimation.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-role-context/BetterRoleContext.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/role-color-everywhere/RoleColorEverywhere.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/show-connections/ShowConnections.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/typing-indicator/TypingIndicator.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
