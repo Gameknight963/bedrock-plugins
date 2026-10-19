@@ -47,4 +47,5 @@
   <Project Path="plugins/image-zoom/ImageZoom.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/better-folders/BetterFolders.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/message-logger/MessageLogger.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/platform-indicators/PlatformIndicators.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>

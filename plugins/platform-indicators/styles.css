@@ -1,0 +1,51 @@
+.vc-platform-indicator {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.vc-platform-indicator-profile {
+    margin: 0 1px;
+    padding: 0 1px;
+}
+
+.vc-platform-indicator-message {
+    position: relative;
+    vertical-align: top;
+    top: -1px;
+}
+
+.vc-member-list-decorators-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
+}
+
+.vc-member-list-decorators-wrapper:not(:empty) {
+    /* Margin to match default Discord decorators */
+    margin-left: 0.25em;
+}
+
+[class*="withDisplayNameStyles"] [class^="name"] {
+    flex: initial;
+}
+.vc-message-decorations-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
+}
+
+.vc-message-decorations-wrapper:not(:empty) {
+    /* Margin to match default Discord decorators */
+    margin-left: 0.25em;
+
+    /* Align vertically */
+    position: relative;
+    vertical-align: top;
+    top: 0.1rem;
+    height: calc(1rem + 4px);
+    max-height: calc(1rem + 4px)
+}
