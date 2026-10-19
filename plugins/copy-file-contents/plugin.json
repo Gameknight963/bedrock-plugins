@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.copy-file-contents",
     "name": "Copy File Contents",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Copy the contents of text attachments from their preview.",
     "entrypoints": {
         "renderer": {

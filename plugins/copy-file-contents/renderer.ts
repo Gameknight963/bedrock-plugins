@@ -57,8 +57,8 @@ function CopyButton({ fileContents, bytesLeft }: PreviewProps): MenuElement {
             ctx.react.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'currentColor', 'aria-hidden': true },
                 ...paths.map((d, index) => ctx.react.createElement('path', { d, key: index }))));
     }
-    const tooltip = ctx.webpack.find<{ Tooltip: unknown }>(value => typeof value?.Tooltip === 'function');
-    return tooltip ? ctx.react.createElement(tooltip.Tooltip, { text, children: button }) : button();
+    const tooltip = ctx.webpack.find(value => typeof value === 'function' && value.prototype?.shouldShowTooltip && value.prototype.render);
+    return tooltip ? ctx.react.createElement(tooltip, { text, children: button }) : button();
 }
 
 export function addCopyButton(props: PreviewProps): MenuElement | null {
