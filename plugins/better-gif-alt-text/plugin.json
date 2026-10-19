@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-gif-alt-text",
     "name": "Better GIF Alt Text",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Add GIF tags and file names to generic GIF alt text.",
     "entrypoints": {
         "renderer": {

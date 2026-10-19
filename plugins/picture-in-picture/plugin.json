@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.picture-in-picture",
     "name": "Picture in Picture",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Open chat videos in a floating picture-in-picture window.",
     "entrypoints": {
         "renderer": {

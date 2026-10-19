@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.native-menus",
     "name": "Native Menus",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Render Discord menus with WinForms and optional background blur.",
     "entrypoints": {
         "main": {

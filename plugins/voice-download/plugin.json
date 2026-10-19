@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.voice-download",
     "name": "Voice Download",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Add a download button to voice messages.",
     "entrypoints": {
         "renderer": {
