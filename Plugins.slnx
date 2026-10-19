@@ -36,4 +36,5 @@
   <Project Path="plugins/always-expand-roles/AlwaysExpandRoles.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/disable-call-idle/DisableCallIdle.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/image-link/ImageLink.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/expression-cloner/ExpressionCloner.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
