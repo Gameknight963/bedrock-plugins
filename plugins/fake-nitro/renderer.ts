@@ -85,13 +85,15 @@ const DEFAULT_STICKER_SIZE = 160;
 
 export const settings = Bedrock.definePluginSettings({
     enableEmojiBypass: {
-        description: "Allows sending fake emojis (also bypasses missing permission to use custom emojis)",
+        label: "Send custom emoji as links",
+        description: "Send custom emoji as image links, including emoji unavailable with your subscription or channel permissions.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     emojiSize: {
-        description: "Size of the emojis when sending",
+        label: "Emoji image size",
+        description: "Image size requested in outgoing emoji links.",
         type: OptionType.SELECT,
         default: DEFAULT_EMOJI_SIZE,
         options: mediaSizes.map(size => ({
@@ -100,19 +102,22 @@ export const settings = Bedrock.definePluginSettings({
         }))
     },
     transformEmojis: {
-        description: "Whether to transform fake emojis into real ones",
+        label: "Display emoji links as emoji",
+        description: "Render FakeNitro emoji links as inline emoji in your client.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     enableStickerBypass: {
-        description: "Allows sending fake stickers (also bypasses missing permission to use stickers)",
+        label: "Send stickers as links",
+        description: "Send stickers as image links, including stickers unavailable with your subscription or channel permissions. Animated PNG stickers are uploaded as GIF attachments.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     stickerSize: {
-        description: "Size of the stickers when sending",
+        label: "Sticker image size",
+        description: "Image size requested in outgoing sticker links and used for converted GIF attachments.",
         type: OptionType.SELECT,
         default: DEFAULT_STICKER_SIZE,
         options: mediaSizes.map(size => ({
@@ -121,39 +126,46 @@ export const settings = Bedrock.definePluginSettings({
         }))
     },
     transformStickers: {
-        description: "Whether to transform fake stickers into real ones",
+        label: "Display sticker links as stickers",
+        description: "Render FakeNitro sticker links and converted GIF attachments as stickers in your client.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     transformCompoundSentence: {
-        description: "Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
+        label: "Render emoji and stickers alongside text",
+        description: "Also render FakeNitro links in messages containing other text or multiple links.",
         type: OptionType.BOOLEAN,
         default: false
     },
     enableStreamQualityBypass: {
-        description: "Allow streaming in nitro quality",
+        label: "Higher streaming quality",
+        description: "Unlock Nitro resolution and frame-rate options for screen sharing.",
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     useStickerHyperLinks: {
-        description: "Whether to use hyperlinks when sending fake stickers",
+        label: "Use named sticker links",
+        description: "Send sticker links as Markdown hyperlinks instead of plain URLs.",
         type: OptionType.BOOLEAN,
         default: true
     },
     useEmojiHyperLinks: {
-        description: "Whether to use hyperlinks when sending fake emojis",
+        label: "Use named emoji links",
+        description: "Send emoji links as Markdown hyperlinks instead of plain URLs.",
         type: OptionType.BOOLEAN,
         default: true
     },
     hyperLinkText: {
-        description: "What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
+        label: "Link text",
+        description: "Text for named emoji and sticker links. {{NAME}} is replaced with the emoji or sticker name.",
         type: OptionType.STRING,
         default: "{{NAME}}"
     },
     disableEmbedPermissionCheck: {
-        description: "Whether to disable the embed permission check when sending fake emojis and stickers",
+        label: "Skip embed permission warning",
+        description: "Send FakeNitro links without confirmation when the channel denies Embed Links. Discord will show links instead of image previews.",
         type: OptionType.BOOLEAN,
         default: false
     },
