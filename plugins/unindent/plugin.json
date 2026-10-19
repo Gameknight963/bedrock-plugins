@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.unindent",
     "name": "Unindent",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Remove shared indentation from code blocks.",
     "entrypoints": {
         "renderer": {

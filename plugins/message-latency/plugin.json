@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.message-latency",
     "name": "Message Latency",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Show an indicator beside messages that took a while to send.",
     "entrypoints": {
         "renderer": {

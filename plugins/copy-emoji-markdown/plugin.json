@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.copy-emoji-markdown",
     "name": "Copy Emoji Markdown",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Copy emoji markup from the expression picker.",
     "entrypoints": {
         "renderer": {

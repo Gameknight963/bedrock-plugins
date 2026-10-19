@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.image-filename",
     "name": "Image Filename",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Show image and GIF file names in hover tooltips.",
     "entrypoints": {
         "renderer": {
