@@ -9,7 +9,8 @@
   <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
     <ItemGroup>
       <PluginFile Include="plugin.json;README.md;LICENSE;NOTICE;package.json" />
-      <PluginFile Include="obj/runtime/renderer.js"><PackagePath>renderer.js</PackagePath></PluginFile>
+      <_CompiledScript Include="obj/runtime/*.js" />
+      <PluginFile Include="@(_CompiledScript)"><PackagePath>%(_CompiledScript.Filename)%(_CompiledScript.Extension)</PackagePath></PluginFile>
     </ItemGroup>
   </Target>
   <Import Project="..\..\tools\Plugin.targets" />

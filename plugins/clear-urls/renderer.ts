@@ -5,19 +5,38 @@ import type { RendererContext } from '@bedrock/renderer';
 interface Provider { urlPattern: string; rules?: string[]; rawRules?: string[]; exceptions?: string[] }
 interface RuleSet { urlPattern: RegExp; rules: RegExp[]; rawRules: RegExp[]; exceptions: RegExp[] }
 let rules: RuleSet[] = [];
-const rulesUrl = 'https://raw.githubusercontent.com/ClearURLs/Rules/master/data.min.json';
+function requestRules(ctx: RendererContext): Promise<{ providers: Record<string, Provider> }> {
+    const requestId = crypto.randomUUID();
+    return new Promise((resolve, reject) => {
+        let unsubscribe = () => {};
+        let finished = false;
+        const finish = (error?: Error, data?: { providers: Record<string, Provider> }) => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timer);
+            unsubscribe();
+            ctx.signal.removeEventListener('abort', abort);
+            if (error) reject(error); else resolve(data!);
+        };
+        const abort = () => finish(new Error('ClearURLs was disabled while loading rules.'));
+        const timer = setTimeout(() => finish(new Error('The ClearURLs main process did not respond within 20 seconds.')), 20000);
+        ctx.signal.addEventListener('abort', abort, { once: true });
+        if (ctx.signal.aborted) { abort(); return; }
+        unsubscribe = ctx.events.on('clearurls.rules.response', ({ id, value }) => {
+            if (id !== ctx.id || value?.requestId !== requestId) return;
+            if (typeof value.error === 'string') finish(new Error(value.error));
+            else if (!value.data?.providers || typeof value.data.providers !== 'object' || Array.isArray(value.data.providers)) finish(new Error('The ClearURLs rules response has no providers.'));
+            else finish(undefined, value.data);
+        });
+        void ctx.events.emit('clearurls.rules.request', { requestId }).catch(error => finish(error instanceof Error ? error : new Error(String(error))));
+    });
+}
 
 export async function start(ctx: RendererContext): Promise<void> {
     ctx.reportStatus('Downloading URL cleaning rules');
-    const signal = AbortSignal.any([ctx.signal, AbortSignal.timeout(15000)]);
-    let prepared: RuleSet[], operation = 'download';
+    const data = await requestRules(ctx);
+    let prepared: RuleSet[];
     try {
-        const response = await fetch(rulesUrl, { signal, credentials: 'omit' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}${response.statusText ? ` ${response.statusText}` : ''}`);
-        operation = 'read';
-        const data = await response.json() as { providers: Record<string, Provider> };
-        if (!data.providers || typeof data.providers !== 'object') throw new Error('The rules file has no providers.');
-        operation = 'compile';
         prepared = Object.entries(data.providers).map(([name, provider]) => {
             try {
                 return {
@@ -32,9 +51,7 @@ export async function start(ctx: RendererContext): Promise<void> {
         });
     } catch (error) {
         if (ctx.signal.aborted) throw error;
-        const detail = signal.aborted && signal.reason?.name === 'TimeoutError' ? 'Request timed out after 15 seconds.' :
-            error instanceof Error ? error.message : String(error);
-        throw new Error(`Could not ${operation} ClearURLs rules from ${rulesUrl}: ${detail}`, { cause: error });
+        throw new Error(`Could not compile ClearURLs rules: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
     }
     if (ctx.signal.aborted) return;
     rules = prepared;
