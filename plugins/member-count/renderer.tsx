@@ -10,7 +10,8 @@ export const settings = Bedrock.definePluginSettings({
     memberList: { type: Bedrock.OptionType.BOOLEAN, label: 'Member list', description: 'Show member counts above the member list', default: true, restartNeeded: true },
     voiceActivity: { type: Bedrock.OptionType.BOOLEAN, label: 'Voice activity', description: 'Include the number of members in visible voice channels', default: true }
 });
-export const numberFormat = (value: number) => new Intl.NumberFormat().format(value);
+const formatter = new Intl.NumberFormat();
+export const numberFormat = (value: number) => formatter.format(value);
 export const cl = (...values: (string | Record<string, unknown>)[]) => values.flatMap(value => typeof value === 'string' ? [value] : Object.keys(value).filter(key => value[key])).map(value => 'vc-membercount-' + value).join(' ');
 const definitions = [
     { id: 'member-list', find: '{isSidebarVisible:', enabled: () => settings.store.memberList, match: /children:\[(\i\.useMemo[^}]+"aria-multiselectable")(?<=className:(\i),.+?)/, replace: "children:[$2?.includes('members')?$self.render():null,$1" },
@@ -43,6 +44,7 @@ export async function start(ctx: RendererContext): Promise<void> {
     const css = await response.text();
     if (ctx.signal.aborted) return;
     ctx.styles.add(css);
-    unsubscribe = subscribeCounts();
+    await ctx.webpack.waitFor(value => value?.dispatch && value?.subscribe && value?.wait);
+    if (!ctx.signal.aborted && context === ctx) unsubscribe = subscribeCounts();
 }
 export function stop(): void { unsubscribe?.(); unsubscribe = undefined; context = undefined; }

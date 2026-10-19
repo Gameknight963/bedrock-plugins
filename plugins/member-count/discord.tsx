@@ -40,7 +40,8 @@ export function useStateFromStores(stores: any[], getValue: () => any, _dependen
 }
 const counts = new Map<string, number>();
 const listeners = new Set<() => void>();
-const queued = new Set<string>();
+const queued = new Map<string, number>();
+let generation = 0;
 let queue = Promise.resolve();
 export const OnlineMemberCountStore = {
     getCount(guildId: string) { return counts.get(guildId); },
@@ -49,26 +50,32 @@ export const OnlineMemberCountStore = {
     ensureCount(guildId: string) {
         if (!guildId || counts.has(guildId) || queued.has(guildId)) return;
         const activation = context;
-        queued.add(guildId);
+        const requestGeneration = generation;
+        queued.set(guildId, requestGeneration);
         queue = queue.then(async () => {
             try {
-                if (context !== activation || activation.signal.aborted || counts.has(guildId)) return;
+                if (context !== activation || activation.signal.aborted || requestGeneration !== generation || counts.has(guildId)) return;
                 const channel = find(value => value?.getName?.() === 'GuildChannelStore', 'guild channels').getDefaultChannel(guildId);
                 if (channel) await find(value => value?.preload && value?.openPrivateChannel, 'channel actions').preload(guildId, channel.id);
                 await new Promise(resolve => setTimeout(resolve, 200));
             } catch (error) { if (!activation.signal.aborted) activation.log.error('Could not fetch the online member count.', error); }
-            finally { queued.delete(guildId); }
+            finally { if (queued.get(guildId) === requestGeneration) queued.delete(guildId); }
         });
     }
 };
 export function subscribeCounts(): () => void {
-    counts.clear(); queued.clear(); queue = Promise.resolve();
+    counts.clear(); queued.clear(); queue = Promise.resolve(); generation++;
     const dispatcher = find(value => value?.dispatch && value?.subscribe && value?.wait, 'dispatcher');
     const update = (event: any) => {
-        counts.set(event.guildId, event.count ?? event.groups?.reduce((sum: number, group: any) => sum + (group.id === 'offline' ? 0 : group.count), 0));
+        const count = event.count ?? event.groups?.reduce((sum: number, group: any) => sum + (group.id === 'offline' ? 0 : group.count), 0);
+        if (!event.guildId || !Number.isFinite(count)) return;
+        counts.set(event.guildId, count);
         for (const listener of listeners) listener();
     };
-    const clear = () => { counts.clear(); for (const listener of listeners) listener(); };
+    const clear = () => {
+        counts.clear(); queued.clear(); queue = Promise.resolve(); generation++;
+        for (const listener of listeners) listener();
+    };
     dispatcher.subscribe('GUILD_MEMBER_LIST_UPDATE', update);
     dispatcher.subscribe('ONLINE_GUILD_MEMBER_COUNT_UPDATE', update);
     dispatcher.subscribe('LOGOUT', clear);
@@ -76,6 +83,6 @@ export function subscribeCounts(): () => void {
         dispatcher.unsubscribe('GUILD_MEMBER_LIST_UPDATE', update);
         dispatcher.unsubscribe('ONLINE_GUILD_MEMBER_COUNT_UPDATE', update);
         dispatcher.unsubscribe('LOGOUT', clear);
-        counts.clear(); queued.clear();
+        counts.clear(); queued.clear(); queue = Promise.resolve(); generation++;
     };
 }
