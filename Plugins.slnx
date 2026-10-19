@@ -38,4 +38,5 @@
   <Project Path="plugins/image-link/ImageLink.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/expression-cloner/ExpressionCloner.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/fake-nitro/FakeNitro.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/who-reacted/WhoReacted.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
