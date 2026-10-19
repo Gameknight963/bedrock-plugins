@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.game-activity-toggle",
+    "name": "Game Activity Toggle",
+    "version": "1.0.0",
+    "description": "Toggle game activity beside the microphone and deafen buttons.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.5.1"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
