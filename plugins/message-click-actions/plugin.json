@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.message-click-actions",
+    "name": "Message Click Actions",
+    "version": "1.0.0",
+    "description": "Customize single, double and triple click actions on messages.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.10.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
