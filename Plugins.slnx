@@ -56,4 +56,5 @@
   <Project Path="plugins/quick-mention/QuickMention.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/unsuppress-embeds/UnsuppressEmbeds.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/copy-file-contents/CopyFileContents.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/always-animate/AlwaysAnimate.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
