@@ -31,6 +31,11 @@ function groupFor(children: any[], id: string): any[] | undefined {
     if (children.some(child => child?.props?.id === id)) return children;
     for (let index = 0; index < children.length; index++) {
         const child = children[index];
+        if (Array.isArray(child)) {
+            const group = groupFor(child, id);
+            if (group) return group;
+            continue;
+        }
         const nested = child?.props?.children;
         if (!nested) continue;
         const normalized = Array.isArray(nested) ? nested : [context!.react.isValidElement(nested) && nested.key == null ? context!.react.cloneElement(nested, { key: 'original' }) : nested];
