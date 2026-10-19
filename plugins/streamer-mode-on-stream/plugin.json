@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.streamer-mode-on-stream",
+    "name": "Streamer Mode On Stream",
+    "version": "1.0.0",
+    "description": "Enable streamer mode while streaming in Discord.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.5.1"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
