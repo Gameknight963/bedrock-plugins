@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.user-voice-show",
     "name": "User Voice Show",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show a voice channel indicator beside users. Click to view their channel, or double-click to join.",
     "entrypoints": {
         "renderer": {

@@ -38,7 +38,7 @@ export function Tooltip(props: any): any {
     return React.createElement(find(value => typeof value === 'function' && value.prototype?.shouldShowTooltip && value.prototype?.render, 'tooltip'), props);
 }
 export function UserSummaryItem(props: any): any { return React.createElement(byCode('user summary', 'defaultRenderUser', 'showDefaultAvatarsForNullUsers'), props); }
-export function BaseText(props: any): any { return React.createElement('span', { style: { fontSize: '12px', lineHeight: '16px', fontWeight: props.weight === 'bold' ? 600 : 400 } }, props.children); }
+export function BaseText(props: any): any { return React.createElement('div', { style: { fontFamily: 'var(--font-primary)', fontSize: '14px', lineHeight: '1.28571', fontWeight: props.weight === 'bold' ? 700 : 400, margin: 0, color: 'var(--text-default)' } }, props.children); }
 export function showToast(message: string, type: string): void {
     const show = byCode('toast', '.currentToastMap.has(');
     const create = context.webpack.find<any>(value => typeof value === 'function' && String(value).includes('variant:"default",icon:') && String(value).includes('.duration'));
