@@ -38,7 +38,7 @@ export function TimeoutContent({ message, children, text }: any): any {
     return ctx.react.createElement(Tooltip, { text: tooltip, children: (props: any) => displayStyle === 'tooltip'
         ? ctx.react.createElement('span', props, typeof children === 'function' ? children(props) : children)
         : ctx.react.createElement('div', { ...props, className: 'vc-std-wrapper' }, typeof children === 'function' ? children(props) : children,
-            ctx.react.createElement('span', { style: { fontSize: '16px', lineHeight: '20px', color: 'var(--text-danger)' } }, countdown(), ' timeout remaining')) });
+            ctx.react.createElement('span', { style: { fontFamily: 'var(--font-primary)', fontSize: '16px', lineHeight: '20px', fontWeight: 400, margin: 0, color: 'var(--text-feedback-critical)' } }, countdown(), ' timeout remaining')) });
 }
 let Boundary: any;
 export function TooltipWrapper(props: any): any {
