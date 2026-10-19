@@ -93,4 +93,5 @@
   <Project Path="plugins/toggle-video-bind/ToggleVideoBind.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/user-voice-show/UserVoiceShow.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/super-reaction-tweaks/SuperReactionTweaks.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/typing-tweaks/TypingTweaks.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
