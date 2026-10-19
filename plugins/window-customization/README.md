@@ -7,6 +7,7 @@ Customize Discord's window from this plugin's Settings tab. Frame changes apply 
 - **Window transparency:** allows transparent CSS themes to show through Discord's window. Enable it, then restart Discord using Bedrock's restart button. Changing it back also requires a restart.
 - **Native title bar:** adds the Windows caption and system menu. Windows draws the title bar and handles its buttons, dragging, and double-clicking.
 - **Restore resizable frame:** adds `WS_THICKFRAME`, the Windows style that enables resizing from the window edges. This is useful for transparent windows, where Electron removes that style.
+- **Disable minimum window size:** allows resizing below Discord's minimum width and height. Turning it off restores Discord's requested minimum. Changes apply immediately with either title bar.
 
 These settings are independent. The plugin's maximize/restore and F11 handling applies while the plugin is enabled, even with Native title bar turned off.
 

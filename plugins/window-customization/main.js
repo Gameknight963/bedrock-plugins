@@ -20,6 +20,12 @@ export const settings = definePluginSettings({
         label: 'Restore resizable frame',
         description: 'Add WS_THICKFRAME to support resizing transparent windows. Changes apply immediately.',
         default: true
+    },
+    disableMinimumSize: {
+        type: OptionType.BOOLEAN,
+        label: 'Disable minimum window size',
+        description: "Allow resizing below Discord's minimum width and height.",
+        default: false
     }
 });
 
@@ -53,6 +59,16 @@ export function start(ctx) {
             record.customization = native.customize(window.getNativeWindowHandle(), options);
             record.fullscreen = false;
             record.patches = [];
+            record.minimumSize = window.getMinimumSize();
+            record.minimumOverrideActive = false;
+            record.patches.push(ctx.patches.instead(window, 'setMinimumSize', (args, next) => {
+                if (record.applyingMinimumSize) return next(...args);
+                if (args.length < 2 || !args.slice(0, 2).every(value => Number.isInteger(value) && value >= 0 && value <= 0x7fffffff))
+                    return next(...args);
+                const result = next(...(settings.store.disableMinimumSize ? [0, 0] : args));
+                record.minimumSize = args.slice(0, 2);
+                return result;
+            }));
             // Keep Electron callers and native caption commands on the same Windows maximize/restore path.
             for (const method of ['maximize', 'unmaximize', 'restore']) {
                 record.patches.push(ctx.patches.instead(window, method, () => {
@@ -79,6 +95,12 @@ export function start(ctx) {
             };
             window.webContents.on('before-input-event', record.key);
         }
+        if (record.minimumOverrideActive !== settings.store.disableMinimumSize) {
+            record.applyingMinimumSize = true;
+            try { window.setMinimumSize(...(settings.store.disableMinimumSize ? [0, 0] : record.minimumSize)); }
+            finally { record.applyingMinimumSize = false; }
+            record.minimumOverrideActive = settings.store.disableMinimumSize;
+        }
     };
     const attach = window => {
         if (window.isDestroyed() || windows.has(window)) return;
@@ -96,6 +118,7 @@ export function start(ctx) {
             contents.off('did-finish-load', loaded);
             if (record.key) contents.off('before-input-event', record.key);
             for (const disposePatch of record.patches || []) disposePatch();
+            if (record.minimumOverrideActive && !window.isDestroyed()) window.setMinimumSize(...record.minimumSize);
             record.customization?.dispose();
             if (record.fullscreen && !window.isDestroyed()) window.emit('leave-full-screen');
         });
