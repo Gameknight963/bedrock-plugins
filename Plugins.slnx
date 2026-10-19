@@ -18,4 +18,5 @@
   <Project Path="plugins/better-gif-alt-text/BetterGifAltText.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/image-filename/ImageFilename.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-profile-themes/NoProfileThemes.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/copy-user-urls/CopyUserURLs.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
