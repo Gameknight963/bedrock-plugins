@@ -83,4 +83,5 @@
   <Project Path="plugins/volume-booster/VolumeBooster.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/read-all-notifications/ReadAllNotifications.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/view-icons/ViewIcons.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/override-forum-defaults/OverrideForumDefaults.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
