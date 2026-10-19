@@ -1,0 +1,11 @@
+Server Info for Bedrock
+
+Adapted from Vencord/Equicord serverInfo by Vendicated, Nuckyz and Z1xus.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/serverInfo
+
+Scroller extraction adapted from ConcatenatedComponentExtractor by sadan.
+
+Copyright (c) 2023-2026 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
