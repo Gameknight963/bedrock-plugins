@@ -35,6 +35,17 @@ export const PermissionStore = findByPropsLazy('can', 'getGuildPermissions');
 export const PermissionsBits = findByPropsLazy('ADMINISTRATOR', 'USE_EXTERNAL_EMOJIS');
 export const React = proxyLazyWebpack(() => context.react);
 export const IconUtils = findByPropsLazy('getGuildBannerURL', 'getUserAvatarURL');
+export function expressionUrl(source: unknown, description: string): URL {
+    try {
+        if (typeof source !== 'string' || !source.trim()) throw new TypeError('Expected a nonempty URL string.');
+        const url = source.startsWith('/') ? new URL(source, globalThis.location?.href) : new URL(source);
+        if (url.protocol !== 'https:' && url.protocol !== 'http:') throw new TypeError(`Expected HTTP or HTTPS, received ${url.protocol}`);
+        return url;
+    } catch (cause) {
+        const value = typeof source === 'string' ? JSON.stringify(source) : `${String(source)} (${typeof source})`;
+        throw new Error(`${description} has an invalid URL: ${value}. ${cause instanceof Error ? cause.message : String(cause)}`, { cause });
+    }
+}
 export const ConfirmModal = findByCodeLazy('actionBarInput:', '"critical"', '"secondary');
 export const UploadHandler = { promptToUpload: findByCodeLazy('Unexpected mismatch between files and file metadata') };
 export const DraftType = { ChannelMessage: 0 };

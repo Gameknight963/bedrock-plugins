@@ -19,7 +19,7 @@
 
 import type { RendererContext } from '@bedrock/renderer';
 import type { LegacyPatch } from './discord.js';
-import { activeContext, checkActive } from './discord.js';
+import { activeContext, checkActive, expressionUrl } from './discord.js';
 import { ApngBlendOp, ApngDisposeOp, parseAPNG } from './apng.js';
 import { GIFEncoder, applyPalette, quantize } from './vendor/gifenc/index.js';
 import { ChannelStore, ConfirmModal, DraftType, EmojiStore, FluxDispatcher, GuildMemberStore, IconUtils, openModal, OverridePremiumTypeStore, PermissionsBits, PermissionStore, React, StickersStore, UploadHandler, UserSettingsActionCreators, UserSettingsProtoStore, findByCodeLazy, findByPropsLazy, proxyLazyWebpack, getCurrentGuild, Logger, addMessagePreSendListener, addMessagePreEditListener, removeMessagePreSendListener, removeMessagePreEditListener, setContext, normalizePatches, stopContext } from './discord.js';
@@ -833,7 +833,7 @@ export const plugin: { patches: LegacyPatch[]; [key: string]: any } = {
                 } else {
                     hasBypass = true;
 
-                    const url = new URL(link);
+                    const url = expressionUrl(link, `Sticker ${JSON.stringify(sticker.name)} (ID ${sticker.id})`);
                     url.searchParams.set("name", sticker.name);
                     url.searchParams.set("lossless", "true");
 
@@ -853,7 +853,7 @@ export const plugin: { patches: LegacyPatch[]; [key: string]: any } = {
                     const emojiSize = s.emojiSize ?? DEFAULT_EMOJI_SIZE;
                     const emojiString = `<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`;
 
-                    const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }));
+                    const url = expressionUrl(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }), `Discord's getEmojiURL for emoji ${JSON.stringify(emoji.name)} (ID ${emoji.id})`);
                     url.searchParams.set("size", emojiSize.toString());
                     url.searchParams.set("name", emoji.name);
                     url.searchParams.set("lossless", "true");
@@ -891,7 +891,7 @@ export const plugin: { patches: LegacyPatch[]; [key: string]: any } = {
 
                 const emojiSize = s.emojiSize ?? DEFAULT_EMOJI_SIZE;
 
-                const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }));
+                const url = expressionUrl(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }), `Discord's getEmojiURL for emoji ${JSON.stringify(emoji.name)} (ID ${emoji.id})`);
                 url.searchParams.set("size", emojiSize.toString());
                 url.searchParams.set("name", emoji.name);
                 url.searchParams.set("lossless", "true");
