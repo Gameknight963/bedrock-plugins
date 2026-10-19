@@ -27,6 +27,14 @@ function byCode(name: string, ...markers: string[]): any {
 export const ThreeDots = (props: any): any => React.createElement(byCode('animated typing dots', 'Math.min(1,Math.max(', 'dotRadius:'), props);
 export const UserSummaryItem = (props: any): any => React.createElement(byCode('user summary', 'defaultRenderUser', 'showDefaultAvatarsForNullUsers'), props);
 export const Tooltip = (props: any): any => React.createElement(find(value => typeof value === 'function' && value.prototype?.shouldShowTooltip && value.prototype?.render, 'tooltip'), props);
+export function useTypingTweaks(): any {
+    const api = (globalThis as any).Bedrock;
+    const tweaks = api._sourcePlugin?.('gameknight963.typing-tweaks');
+    const [, refresh] = React.useState(0);
+    React.useEffect(() => tweaks?.settings?.subscribe(() => refresh(value => value + 1)), [tweaks]);
+    const record = api.plugins.list().find((plugin: any) => plugin.manifest.id === 'gameknight963.typing-tweaks');
+    return record?.enabled && record.rendererStatus === 'running' ? tweaks : undefined;
+}
 const hashes: Record<string, string> = { ONE_USER_TYPING: 'lJ9sZX', TWO_USERS_TYPING: 'rB0CUa', THREE_USERS_TYPING: 'StKThj', SEVERAL_USERS_TYPING: 'uVDhqZ' };
 export function getIntlMessage(name: string, args?: any): any {
     const messages = find(value => value?.[Symbol.toStringTag] === 'IntlMessagesProxy', 'message translations');

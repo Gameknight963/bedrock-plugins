@@ -1,7 +1,7 @@
 /* Copyright (c) 2022 Vendicated and contributors. SPDX-License-Identifier: GPL-3.0-or-later
  * Modified for Bedrock on 2026-10-19. See NOTICE. */
 import type { RendererContext, SourcePatch } from '@bedrock/renderer';
-import { React, setContext, getContext, GuildMemberStore, RelationshipStore, SelectedChannelStore, Tooltip, TypingStore, UserGuildSettingsStore, UserStore, UserSummaryItem, useStateFromStores, ThreeDots, getIntlMessage, ErrorBoundary } from './discord.js';
+import { React, setContext, getContext, GuildMemberStore, RelationshipStore, SelectedChannelStore, Tooltip, TypingStore, UserGuildSettingsStore, UserStore, UserSummaryItem, useStateFromStores, ThreeDots, getIntlMessage, ErrorBoundary, useTypingTweaks } from './discord.js';
 const enum IndicatorMode { Dots = 1, Avatars = 2 }
 export const settings = Bedrock.definePluginSettings({
     includeCurrentChannel: { type: Bedrock.OptionType.BOOLEAN, label: 'Current channel', description: 'Show indicators for the selected channel', default: true },
@@ -19,6 +19,7 @@ function getDisplayName(guildId: string, userId: string) {
 
 function TypingIndicatorView({ channelId, guildId }: { channelId: string; guildId: string; }) {
     const options = settings.use(['includeCurrentChannel', 'includeMutedChannels', 'includeIgnoredUsers', 'includeBlockedUsers', 'indicatorMode']);
+    const typingTweaks = useTypingTweaks();
     const typingUsers: Record<string, number> = useStateFromStores(
         [TypingStore, RelationshipStore, UserGuildSettingsStore, UserStore, GuildMemberStore],
         () => ({ ...TypingStore.getTypingUsers(channelId) }),
@@ -47,7 +48,7 @@ function TypingIndicatorView({ channelId, guildId }: { channelId: string; guildI
         id !== myId && !(RelationshipStore.isBlocked(id) && !options.includeBlockedUsers) && !(RelationshipStore.isIgnored(id) && !options.includeIgnoredUsers)
     );
     const [a, b, c] = typingUsersArray;
-    let tooltipText: string;
+    let tooltipText: any;
 
     switch (typingUsersArray.length) {
         case 0: break;
@@ -64,7 +65,7 @@ function TypingIndicatorView({ channelId, guildId }: { channelId: string; guildI
             break;
         }
         default: {
-            tooltipText = getIntlMessage("SEVERAL_USERS_TYPING");
+            tooltipText = typingTweaks?.buildSeveralUsers?.({ users: [a, b].map(UserStore.getUser).filter(Boolean), count: typingUsersArray.length - 2, guildId }) ?? getIntlMessage("SEVERAL_USERS_TYPING");
             break;
         }
     }
