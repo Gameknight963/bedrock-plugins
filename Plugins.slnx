@@ -55,4 +55,5 @@
   <Project Path="plugins/better-upload-button/BetterUploadButton.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/quick-mention/QuickMention.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/unsuppress-embeds/UnsuppressEmbeds.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/copy-file-contents/CopyFileContents.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
