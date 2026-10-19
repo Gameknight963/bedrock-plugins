@@ -16,6 +16,14 @@ export const settings = Bedrock.definePluginSettings({
 function find<T>(predicate: (value: any) => boolean): T | undefined { return context?.webpack.find<T>(predicate); }
 function currentUser(): string | undefined { return find<{ getCurrentUser(): { id: string } }>(v => typeof v?.getCurrentUser === 'function')?.getCurrentUser()?.id; }
 function dispatcher(): Dispatcher | undefined { return find<Dispatcher>(v => typeof v?.dispatch === 'function' && typeof v?.subscribe === 'function'); }
+function hiddenByNoBlockedMessages(message: Message): boolean {
+    const runtime = Bedrock as unknown as {
+        plugins: { list(): Array<{ manifest: { id: string }; enabled: boolean }> };
+        _sourcePlugin?(id: string): { isSuppressed?(message: Message): { suppressed: boolean } } | undefined;
+    };
+    const plugin = runtime.plugins.list().find(plugin => plugin.manifest.id === 'gameknight963.no-blocked-messages');
+    return !!plugin?.enabled && !!runtime._sourcePlugin?.(plugin.manifest.id)?.isSuppressed?.(message).suppressed;
+}
 function mention(message: Message): boolean {
     if (settings.store.shouldMention !== 2) return settings.store.shouldMention === 1;
     const plugins = (Bedrock as unknown as { plugins: { list(): Array<{ manifest: { id: string }; enabled: boolean; settings: Record<string, unknown> }> } }).plugins.list();
@@ -42,10 +50,14 @@ function navigate(up: boolean, edit: boolean): void {
     const store = find<{ getMessages(id: string): { _array: Message[] } }>(v => typeof v?.getMessages === 'function' && typeof v?.getMessage === 'function');
     const relationships = find<{ isBlockedOrIgnored?(id: string): boolean; isBlocked?(id: string): boolean; isIgnored?(id: string): boolean }>(v => typeof v?.isBlocked === 'function' && typeof v?.getRelationships === 'function');
     const types = find<{ REPLYABLE: Set<number> }>(v => v?.REPLYABLE instanceof Set)?.REPLYABLE;
-    const messages = (store?.getMessages(channelId)?._array ?? []).filter(message => !message.deleted &&
-        (!edit || message.author.id === currentUser()) && (types ? types.has(message.type) : [0, 19, 20, 23].includes(message.type)) &&
-        !(message.hasFlag?.(64) ?? ((message.flags ?? 0) & 64)) && (!settings.store.ignoreBlockedAndIgnored ||
-            !(relationships?.isBlockedOrIgnored?.(message.author.id) ?? (relationships?.isBlocked?.(message.author.id) || relationships?.isIgnored?.(message.author.id)))));
+    const messages = (store?.getMessages(channelId)?._array ?? []).filter(message => {
+        if (message.deleted || (edit && message.author.id !== currentUser())) return false;
+        if (!(types ? types.has(message.type) : [0, 19, 20, 23].includes(message.type))) return false;
+        if (message.hasFlag?.(64) ?? ((message.flags ?? 0) & 64)) return false;
+        const blocked = relationships?.isBlockedOrIgnored?.(message.author.id) ??
+            (relationships?.isBlocked?.(message.author.id) || relationships?.isIgnored?.(message.author.id));
+        return !(settings.store.ignoreBlockedAndIgnored && blocked) && !hiddenByNoBlockedMessages(message);
+    });
     const previous = edit ? editing : replying;
     const index = messages.findIndex(message => message.id === previous);
     const message = previous === null || index < 0 ? messages.at(-1) : messages[index + (up ? -1 : 1)];
