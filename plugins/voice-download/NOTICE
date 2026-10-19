@@ -7,3 +7,5 @@ Copyright (c) 2024 Vendicated and contributors; original authors: puv.
 GPL-3.0-or-later. Full license text is in LICENSE.
 
 Modified for Bedrock on 2026-10-17: runtime integration, lifecycle cleanup and controls/settings described in README.md.
+
+Modified on 2026-10-18: restore the original voice-message download icon and leave ordinary audio attachments unchanged.

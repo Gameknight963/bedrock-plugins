@@ -1,6 +1,6 @@
 # Voice Download
 
-Adds a Download audio link next to voice messages and audio attachments in chat. It opens the original audio file for saving; whether it downloads directly depends on how Discord and the file server handle the link.
+Adds a download icon to voice-message controls, matching VoiceDownload's original interface. Clicking it opens the voice message in your browser for saving. Ordinary audio attachments keep Discord's existing download control.
 
 Links use the attachment URL already provided by Discord. Nothing is uploaded to another service.
 

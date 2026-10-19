@@ -12,7 +12,6 @@
       <PluginFile Include="LICENSE"><PackagePath>LICENSE</PackagePath></PluginFile>
       <PluginFile Include="NOTICE"><PackagePath>NOTICE</PackagePath></PluginFile>
       <PluginFile Include="package.json"><PackagePath>package.json</PackagePath></PluginFile>
-      <PluginFile Include="media.js"><PackagePath>media.js</PackagePath></PluginFile>
       <PluginFile Include="renderer.js"><PackagePath>renderer.js</PackagePath></PluginFile>
     </ItemGroup>
   </Target>
