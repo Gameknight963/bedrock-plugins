@@ -264,9 +264,15 @@ export const plugin = {
 };
 
 export const patches = normalizePatches(plugin.patches);
-export function start(ctx: RendererContext): void {
+export async function start(ctx: RendererContext): Promise<void> {
     setContext(ctx);
     userJoinTimes.clear(); myLastChannelId = undefined; runOneTime = true;
+    await Promise.all([
+        ctx.webpack.waitFor(value => typeof value?.dispatch === 'function' && typeof value?.subscribe === 'function'),
+        ctx.webpack.waitFor(value => typeof value?.getName === 'function' && value.getName() === 'UserStore'),
+        ctx.webpack.waitFor(value => typeof value?.getName === 'function' && value.getName() === 'GuildStore')
+    ]);
+    if (ctx.signal.aborted) return;
     for (const [event, handler] of Object.entries(plugin.flux)) FluxDispatcher.subscribe(event, handler);
     try { plugin.start(); } catch (error) { stop(); throw error; }
 }
