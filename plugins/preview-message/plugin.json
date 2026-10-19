@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.preview-message",
     "name": "Preview Message",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Preview a draft and its attachments before sending it.",
     "entrypoints": {
         "renderer": {

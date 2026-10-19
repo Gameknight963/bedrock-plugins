@@ -63,7 +63,7 @@ function PreviewButton(props: ChatBarProps): MenuElement | null {
     const type = props.type;
     const includeAttachments = type?.attachments !== false;
     const hasUploads = includeAttachments && !!uploads?.getUploads(props.channel.id, 0).length;
-    if (props.disabled || (!draft?.getDraft(props.channel.id, 0)?.length && !hasUploads)) return null;
+    if (props.isAnyChat === false || props.disabled || (!draft?.getDraft(props.channel.id, 0)?.length && !hasUploads)) return null;
     return activation.chatBar.button({ label: 'Preview Message', icon: React.createElement('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'currentColor', style: { scale: '1.096', translate: '0 -1px' } },
         React.createElement('path', { d: 'M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z' })),
         onClick: async () => { try { await preview(props.channel.id, includeAttachments); } catch (error) { if (!activation.signal.aborted) activation.notifications.show({ title: 'Could not preview this message.', body: error instanceof Error ? error.message : String(error), type: 'error' }); } } });
