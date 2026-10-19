@@ -53,4 +53,5 @@
   <Project Path="plugins/message-link-embeds/MessageLinkEmbeds.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/channel-tabs/ChannelTabs.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/better-upload-button/BetterUploadButton.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/quick-mention/QuickMention.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
