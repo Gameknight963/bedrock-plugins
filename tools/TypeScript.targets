@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <BedrockSdkRoot Condition="'$(BedrockSdkRoot)' == ''">$(MSBuildThisFileDirectory)..\.sdk\bedrock</BedrockSdkRoot>
+  </PropertyGroup>
+  <Target Name="BuildPluginTypeScript" BeforeTargets="Build;DeclarePluginFiles">
+    <Error Condition="!Exists('$(MSBuildThisFileDirectory)..\node_modules\typescript\lib\typescript.js')" Text="Run npm ci in the plugin collection folder before building TypeScript projects." />
+    <Exec Command="node &quot;$(MSBuildThisFileDirectory)build-typescript.cjs&quot; &quot;$(MSBuildProjectDirectory)&quot; &quot;$(BedrockSdkRoot)&quot;" />
+  </Target>
+</Project>

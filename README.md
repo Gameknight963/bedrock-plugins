@@ -20,6 +20,8 @@ The Example plugin remains in Bedrock's `Examples` directory rather than the off
 
 Run `python tools/prepare_sdk.py` to fetch the pinned SDK. Then run `python tools/build.py` on Windows with Visual Studio's C++ build tools installed. Native packages currently target Windows x64. 
 
+Run `npm ci` once in this folder to install the compiler used by TypeScript projects.
+
 Projects default to the v145 toolset. If you have Visual Studio 2022, pass `--toolset v143`. GitHub Actions also builds with v143. 
 
 Pass `--sdk <path>` to use an existing Bedrock checkout. Replace <path> with its directory. The checkout must match the commit specified in sdk.json

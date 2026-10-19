@@ -74,6 +74,8 @@ For a native plugin, use `"runtime": "native"` and the packaged DLL path. [backd
 
 Declarations run after building so generated paths such as `TargetPath` are available. Plain JavaScript projects omit the native output item and disable npm installation and build scripts. TypeScript projects can enable their build script.
 
+TypeScript plugins can import `tools/TypeScript.targets` before `Plugin.targets` and extend `tsconfig.plugin.json` in their own `tsconfig.json`. The shared target type-checks the source and writes JavaScript to `obj/runtime`; package that generated file as `renderer.js`. Import SDK types from `@bedrock/renderer`. Run `npm ci` at the collection root to install the pinned compiler.
+
 The collection script invokes `PackagePlugin`, which builds the project and copies its declared files into `.artifacts/packages`. It then validates that folder, creates its ZIP and adds it to the catalog. Projects can also invoke `PackagePlugin` directly through MSBuild.
 
 Increment the plugin version when changing a published package. CI rejects changing an already published version to different package contents. Changing `sdk.json` requires review, just like changing a dependency.

@@ -21,6 +21,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+      - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: python tools/prepare_sdk.py
       - run: python tools/build.py --toolset v143 --source-commit $env:GITHUB_SHA
       - uses: actions/upload-artifact@v4
