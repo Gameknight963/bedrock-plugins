@@ -1,0 +1,9 @@
+Split Large Messages for Bedrock
+
+Adapted from Vencord/Equicord splitLargeMessages by Reycko and justjxke.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/equicordplugins/splitLargeMessages
+
+Copyright (c) 2025 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
