@@ -34,3 +34,4 @@ export const patches: SourcePatch[] = plugin.patches.map((patch, index) => ({
     id: `notification-volume-${index}`, find: patch.find,
     replacement: { ...patch.replacement, match: new RegExp(patch.replacement.match.source.replaceAll('\\i', '(?:[A-Za-z_$][\\w$]*)'), patch.replacement.match.flags) }
 }));
+export function start(): void {}

@@ -96,3 +96,4 @@ export const patches: SourcePatch[] = plugin.patches.map((patch, index) => ({
         return source;
     } }
 }));
+export function start(): void {}
