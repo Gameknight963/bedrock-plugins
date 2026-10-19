@@ -30,4 +30,5 @@
   <Project Path="plugins/character-counter/CharacterCounter.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/message-latency/MessageLatency.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/spotify-share-commands/SpotifyShareCommands.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/clear-urls/ClearURLs.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>

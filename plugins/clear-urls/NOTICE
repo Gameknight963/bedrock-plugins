@@ -1,0 +1,9 @@
+ClearURLs for Bedrock
+
+Adapted from Vencord/Equicord clearURLs by adryd and thororen.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/clearURLs
+
+Copyright (c) 2022 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
