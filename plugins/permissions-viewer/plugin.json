@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.permissions-viewer",
     "name": "Permissions Viewer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "View user and channel permissions and the roles of a server.",
     "entrypoints": {
         "renderer": {

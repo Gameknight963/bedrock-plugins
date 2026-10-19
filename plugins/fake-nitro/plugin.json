@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.fake-nitro",
     "name": "FakeNitro",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Send custom emoji and stickers as links, use client themes and unlock streaming quality options.",
     "entrypoints": {
         "renderer": {

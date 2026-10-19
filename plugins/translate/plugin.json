@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.translate",
     "name": "Translate",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Translate messages with Google Translate, DeepL or Kagi.",
     "entrypoints": {
         "main": {

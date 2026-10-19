@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.copy-user-urls",
     "name": "Copy User URLs",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Adds Copy User URL to user context menus.",
     "entrypoints": {
         "renderer": {
