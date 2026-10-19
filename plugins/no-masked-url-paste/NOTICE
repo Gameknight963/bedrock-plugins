@@ -1,0 +1,9 @@
+No Masked URL Paste for Bedrock
+
+Adapted from Vencord/Equicord noMaskedUrlPaste by CatNoir.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/noMaskedUrlPaste
+
+Copyright (c) 2023 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-18

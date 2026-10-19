@@ -24,4 +24,5 @@
   <Project Path="plugins/reverse-image-search/ReverseImageSearch.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/unindent/Unindent.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-reply-mention/NoReplyMention.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/no-masked-url-paste/NoMaskedUrlPaste.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
