@@ -26,4 +26,5 @@
   <Project Path="plugins/no-reply-mention/NoReplyMention.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-masked-url-paste/NoMaskedUrlPaste.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/dont-round-my-timestamps/DontRoundMyTimestamps.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/fix-codeblock-gap/FixCodeblockGap.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
