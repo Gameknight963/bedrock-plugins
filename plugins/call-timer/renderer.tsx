@@ -1,0 +1,276 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import type { RendererContext } from '@bedrock/renderer';
+import { React, ErrorBoundary, GuildStore, UserStore, FluxDispatcher, useFixedTimer, formatDurationMs, setContext, stopContext, normalizePatches, isActive } from './discord.js';
+import { Timer } from './Timer.js';
+const { definePluginSettings, OptionType } = Bedrock;
+type VoiceState = { userId: string; channelId?: string | null; oldChannelId?: string | null; guildId?: string | null };
+type PassiveUpdateState = { guildId: string; voiceStates?: VoiceState[] };
+export const settings = definePluginSettings({
+    format: {
+        label: "Timer format",
+        type: OptionType.SELECT,
+        description: "Compact or human readable format:",
+        options: [
+            {
+                label: "30:23:00:42",
+                value: "stopwatch",
+            },
+            {
+                label: "30d 23h 00m 42s",
+                value: "human"
+            }
+        ],
+        default: "stopwatch"
+    },
+    allCallTimers: {
+        label: "Show timers for other users",
+        type: OptionType.BOOLEAN,
+        description: "Add call timer to all users in a server voice channel",
+        restartNeeded: true,
+        default: false
+    },
+    showWithoutHover: {
+        label: "Always show timers",
+        type: OptionType.BOOLEAN,
+        description: "Always show the timer without needing to hover",
+        restartNeeded: true,
+        default: false
+    },
+    showRoleColor: {
+        label: "Use role colors",
+        type: OptionType.BOOLEAN,
+        description: "Use the voice user's role color for timer text.",
+        restartNeeded: false,
+        default: false
+    },
+    trackSelf: {
+        label: "Show your own timer",
+        type: OptionType.BOOLEAN,
+        description: "Also track yourself",
+        restartNeeded: false,
+        default: false
+    },
+    showSeconds: {
+        label: "Show seconds",
+        type: OptionType.BOOLEAN,
+        description: "Show seconds in the timer",
+        restartNeeded: false,
+        default: false
+    },
+    watchLargeGuilds: {
+        label: "Track large servers",
+        type: OptionType.BOOLEAN,
+        description: "Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues.",
+        restartNeeded: true,
+        default: false
+    }
+});
+
+// Save the join time of all users in a Map
+type userJoinData = { channelId: string, time: number; guildId: string | null; };
+const userJoinTimes = new Map<string, userJoinData>();
+
+function addUserJoinTime(userId: string, channelId: string, guildId: string | null) {
+    userJoinTimes.set(userId, { channelId, time: Date.now(), guildId });
+}
+
+function removeUserJoinTime(userId: string) {
+    userJoinTimes.delete(userId);
+}
+
+// For every user, channelId and oldChannelId will differ when moving channel.
+// Only for the local user, channelId and oldChannelId will be the same when moving channel,
+// for some ungodly reason
+let myLastChannelId: string | undefined;
+
+// Allow user updates on discord first load
+let runOneTime = true;
+
+export const plugin = {
+    name: "CallTimer",
+    description: "Add call timers for all users in voice channels and in the connection status.",
+    settings,
+
+    isModified: true,
+    startTime: 0,
+    interval: void 0 as ReturnType<typeof setInterval> | undefined,
+
+    patches: [
+        {
+            find: "VOICE_PANEL}}",
+            predicate: () => settings.store.allCallTimers,
+            replacement: [
+                {
+                    match: /user:(\i).*?\.isEmbedded.{0,200};(?=return\(\i&&null!=\i&&(\i)\.push\(\i\))/,
+                    replace: "$&$2.push($self.renderTimer($1.id));",
+                    predicate: () => !settings.store.showWithoutHover,
+                },
+                {
+                    match: /#{intl::GUEST_NAME_SUFFIX}\)\]\}\):""(?=.*?userId:(\i\.\i))/,
+                    replace: "$&,$self.renderTimer($1)",
+                    predicate: () => settings.store.showWithoutHover,
+                }
+            ]
+        },
+        {
+            find: '"RTCConnectionMenu"',
+            replacement: {
+                match: /("RTCConnectionMenu".{0,300}?lineClamp:1,children:)(\i)(?=,|}\))/,
+                replace: "$1[$2,$self.renderConnectionTimer({ channelId: this?.props?.channel?.id })]"
+            }
+        },
+    ],
+
+    flux: {
+        VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
+            const myId = UserStore.getCurrentUser().id;
+
+            for (const state of voiceStates) {
+                const { userId, channelId, guildId } = state;
+                const isMe = userId === myId;
+
+                // check if the state does not actually has a `oldChannelId` property
+                if (!("oldChannelId" in state) && !runOneTime && !settings.store.watchLargeGuilds) {
+                    // batch update triggered. This is ignored because it
+                    // is caused by opening a previously unopened guild
+                    continue;
+                }
+
+                let { oldChannelId } = state;
+                if (isMe && channelId !== myLastChannelId) {
+                    oldChannelId = myLastChannelId;
+                    myLastChannelId = channelId ?? undefined;
+                }
+
+                if (channelId !== oldChannelId) {
+                    if (channelId) {
+                        // move or join
+                        addUserJoinTime(userId, channelId, guildId ?? null);
+                    } else if (oldChannelId) {
+                        // leave
+                        removeUserJoinTime(userId);
+                    }
+                }
+            }
+            runOneTime = false;
+        },
+        PASSIVE_UPDATE_V1(passiveUpdate: PassiveUpdateState) {
+            if (settings.store.watchLargeGuilds) {
+                return;
+            }
+
+            const { voiceStates } = passiveUpdate;
+            if (!voiceStates) {
+                // if there are no users in a voice call
+                return;
+            }
+
+            // find all users that have the same guildId and if that user is not in the voiceStates, remove them from the map
+            const { guildId } = passiveUpdate;
+
+            // check the guildId in the userJoinTimes map
+            for (const [userId, data] of userJoinTimes) {
+                if (data.guildId === guildId) {
+                    // check if the user is in the voiceStates
+                    const userInVoiceStates = voiceStates.find(state => state.userId === userId);
+                    if (!userInVoiceStates) {
+                        // remove the user from the map
+                        removeUserJoinTime(userId);
+                    }
+                }
+            }
+
+            // since we were gifted this data let's use it to update our join times
+            for (const state of voiceStates) {
+                const { userId, channelId } = state;
+
+                if (!channelId) {
+                    // channelId is never undefined here
+                    continue;
+                }
+
+                // check if the user is in the map
+                if (userJoinTimes.has(userId)) {
+                    // check if the user is in a channel
+                    if (channelId !== userJoinTimes.get(userId)?.channelId) {
+                        // update the user's join time
+                        addUserJoinTime(userId, channelId, guildId);
+                    }
+                } else {
+                    // user wasn't previously tracked, add the user to the map
+                    addUserJoinTime(userId, channelId, guildId);
+                }
+            }
+        },
+    },
+
+    subscribeToAllGuilds() {
+        // we need to subscribe to all guilds' events because otherwise we would miss updates on large guilds
+        const guilds = Object.values(GuildStore.getGuilds() as Record<string, { id: string }>).map(guild => guild.id);
+        const subscriptions = guilds.reduce((acc: Record<string, unknown>, id: string) => ({ ...acc, [id]: { typing: true } }), {});
+        FluxDispatcher.dispatch({ type: "GUILD_SUBSCRIPTIONS_FLUSH", subscriptions });
+    },
+
+    start() {
+        if (settings.store.watchLargeGuilds) {
+            this.subscribeToAllGuilds();
+        }
+    },
+
+    renderTimer(userId: string) {
+        if (!isActive()) return null;
+        // get the user join time from the users object
+        const joinTime = userJoinTimes.get(userId);
+        if (!joinTime?.time) {
+            // join time is unknown
+            return;
+        }
+        if (userId === UserStore.getCurrentUser().id && !settings.store.trackSelf) {
+            // don't show for self
+            return;
+        }
+
+        return (
+            <ErrorBoundary>
+                <Timer time={joinTime.time} />
+            </ErrorBoundary>
+        );
+    },
+
+    renderConnectionTimer({ channelId }: { channelId: string | undefined; }) {
+        if (!isActive()) return null;
+        return <ErrorBoundary noop>
+            <this.ConnectionTimer channelId={channelId} />
+        </ErrorBoundary>;
+    },
+
+    ConnectionTimer: ErrorBoundary.wrap((_: { channelId: string | undefined; }) => {
+        const joinTime = userJoinTimes.get(UserStore.getCurrentUser().id)?.time;
+        const time = useFixedTimer({ initialTime: joinTime });
+
+        if (joinTime == null) return null;
+
+        return (
+            <p style={{ margin: 0, fontFamily: "var(--font-code)" }}>
+                {formatDurationMs(time, settings.store.format === "human")}
+            </p>
+        );
+    }, { noop: true }),
+};
+
+export const patches = normalizePatches(plugin.patches);
+export function start(ctx: RendererContext): void {
+    setContext(ctx);
+    userJoinTimes.clear(); myLastChannelId = undefined; runOneTime = true;
+    for (const [event, handler] of Object.entries(plugin.flux)) FluxDispatcher.subscribe(event, handler);
+    try { plugin.start(); } catch (error) { stop(); throw error; }
+}
+export function stop(): void {
+    for (const [event, handler] of Object.entries(plugin.flux)) FluxDispatcher.unsubscribe(event, handler);
+    stopContext(); userJoinTimes.clear();
+}

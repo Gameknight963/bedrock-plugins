@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.call-timer",
+    "name": "Call Timer",
+    "version": "1.0.0",
+    "description": "Show call duration in the connection panel and beside voice users.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.5.1"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
