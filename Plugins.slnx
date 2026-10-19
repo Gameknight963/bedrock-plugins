@@ -84,4 +84,12 @@
   <Project Path="plugins/read-all-notifications/ReadAllNotifications.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/view-icons/ViewIcons.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/override-forum-defaults/OverrideForumDefaults.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/full-search-context/FullSearchContext.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/limitless-screenshare/LimitlessScreenshare.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/mention-avatars/MentionAvatars.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/no-blocked-messages/NoBlockedMessages.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/send-timestamps/SendTimestamps.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/show-all-message-buttons/ShowAllMessageButtons.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/toggle-video-bind/ToggleVideoBind.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/user-voice-show/UserVoiceShow.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
