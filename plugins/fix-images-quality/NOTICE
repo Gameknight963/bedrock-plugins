@@ -1,0 +1,9 @@
+Fix Images Quality for Bedrock
+
+Adapted from Vencord/Equicord fixImagesQuality by Nuckyz and Ven.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/fixImagesQuality
+
+Copyright (c) 2024 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
