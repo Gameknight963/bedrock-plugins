@@ -33,4 +33,5 @@
   <Project Path="plugins/clear-urls/ClearURLs.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/no-mosaic/NoMosaic.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/fix-images-quality/FixImagesQuality.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/always-expand-roles/AlwaysExpandRoles.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
