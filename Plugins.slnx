@@ -45,4 +45,5 @@
   <Project Path="plugins/download-all-attachments/DownloadAllAttachments.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/split-large-messages/SplitLargeMessages.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/image-zoom/ImageZoom.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-folders/BetterFolders.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>

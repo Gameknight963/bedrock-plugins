@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.better-folders",
+    "name": "BetterFolders",
+    "version": "1.0.0",
+    "description": "Show expanded server folders in a separate sidebar.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.5.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
