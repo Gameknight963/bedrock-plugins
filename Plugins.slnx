@@ -34,4 +34,5 @@
   <Project Path="plugins/no-mosaic/NoMosaic.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/fix-images-quality/FixImagesQuality.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/always-expand-roles/AlwaysExpandRoles.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/disable-call-idle/DisableCallIdle.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
