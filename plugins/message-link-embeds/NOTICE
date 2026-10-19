@@ -1,0 +1,10 @@
+Message Link Embeds for Bedrock
+
+Adapted from Vencord/Equicord messageLinkEmbeds by TheSun, Vendicated and RyanCaoDev.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/messageLinkEmbeds
+
+Includes an adaptation of Vencord's MessageUpdater.
+Copyright (c) 2022-2024 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
