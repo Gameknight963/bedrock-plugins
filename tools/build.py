@@ -136,7 +136,7 @@ def main():
                 tree.update(file.read_bytes())
                 tree.update(b"\0")
         notices = [(name, (output / name).read_text(encoding="utf-8")) for name in ["NOTICE", "NOTICE.md", "THIRD_PARTY_NOTICES.md"] if (output / name).is_file()]
-        records.append({"manifest": manifest, "license": manifest.get("license"), "readme": (output / manifest.get("readme", "README.md")).read_text(),
+        records.append({"manifest": manifest, "license": manifest.get("license"), "readme": (output / manifest.get("readme", "README.md")).read_text(encoding="utf-8"),
             "documents": {"license": (output / "LICENSE").read_text(encoding="utf-8"),
                 "notices": "\n\n".join(f"{name}\n\n{text}" if len(notices) > 1 else text for name, text in notices)},
             "package": {"url": args.base_url.rstrip("/") + "/" + filename if args.base_url else filename, "sha256": checksum, "size": (dist / filename).stat().st_size},
