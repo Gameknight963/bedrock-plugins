@@ -12,7 +12,7 @@ export const patches: SourcePatch[] = [{ id: 'account-panel-profile', find: 'han
     { match: new RegExp(String.raw`(\.AVATAR,children:.+?renderPopout:\((\i),\i\)=>)\{(.+?)\}(?=,position)(?<=currentUser:(\i).+?)`.replaceAll('\\i', identifier)),
         replace: (_match: string, rest: string, popoutProps: string, originalPopout: string, currentUser: string) => `${rest}$self.UserProfile({popoutProps:${popoutProps},currentUser:${currentUser},originalRenderPopout:()=>{${originalPopout}}})` },
     { match: /\.AVATAR,children:.+?onRequestClose:\(\)=>\{/, replace: '$&$self.onPopoutClose();' },
-    { match: new RegExp(String.raw`ref:(\i),style:\i(?=.{0,250}\["5fWB8U"\])`.replaceAll('\\i', identifier)), replace: '$&,onContextMenu:($self.grabRef($1),$self.openAccountPanelContextMenu)' }
+    { match: new RegExp(String.raw`ref:(\i),style:(?:\i|\{[^{}]*\})(?=.{0,250}\["5fWB8U"\])`.replaceAll('\\i', identifier)), replace: '$&,onContextMenu:($self.grabRef($1),$self.openAccountPanelContextMenu)' }
 ] }];
 function find(predicate: (value: any) => boolean, name: string): any {
     const value = context!.webpack.find(predicate);

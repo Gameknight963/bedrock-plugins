@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.account-panel-server-profile",
     "name": "Account Panel Server Profile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Right-click your account panel to view your profile in the current server.",
     "entrypoints": {
         "renderer": {
