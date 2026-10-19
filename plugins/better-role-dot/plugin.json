@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-role-dot",
     "name": "Better Role Dot",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Click role dots to copy their colors. Optionally show colored names alongside role dots.",
     "entrypoints": {
         "renderer": {

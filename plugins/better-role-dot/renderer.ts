@@ -12,7 +12,6 @@ function conditional(id: string, find: string, match: RegExp, enabled: () => boo
     return { id, find, all: true, replacement: { match: /^[\s\S]*$/, replace(source: string): string {
         if (!enabled()) return source;
         const expression = new RegExp(match.source.replaceAll('\\i', identifier), match.flags);
-        if (!expression.test(source)) throw new Error('The role display condition was not found.');
         return source.replace(expression, 'true');
     } } };
 }
