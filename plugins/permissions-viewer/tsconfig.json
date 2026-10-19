@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig.plugin.json",
+    "compilerOptions": {
+        "jsx": "react"
+    },
+    "include": [
+        "*.ts",
+        "*.tsx"
+    ]
+}

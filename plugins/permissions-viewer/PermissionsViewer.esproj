@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.6887863">
+  <PropertyGroup>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunNpmAudit>false</ShouldRunNpmAudit>
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**;**/node_modules/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <Import Project="..\..\tools\TypeScript.targets" />
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <PluginFile Include="plugin.json;README.md;LICENSE;NOTICE;package.json;styles.css" />
+      <PluginFile Include="obj/runtime/renderer.js"><PackagePath>renderer.js</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
+</Project>
