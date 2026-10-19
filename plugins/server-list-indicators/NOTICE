@@ -1,0 +1,10 @@
+Server List Indicators for Bedrock
+
+Adapted from Vencord/Equicord serverListIndicators by Rini and Panniku.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/serverListIndicators
+
+Copyright (c) 2022 Sofia Lima
+Server-list source integration: Copyright (c) 2022 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
