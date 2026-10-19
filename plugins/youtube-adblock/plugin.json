@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.youtube-adblock",
     "name": "YouTube Adblock",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Block ads in YouTube embeds and Watch Together.",
     "entrypoints": {
         "main": {

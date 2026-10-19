@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.fix-images-quality",
     "name": "Fix Images Quality",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Load higher-resolution attachment images.",
     "entrypoints": {
         "renderer": {

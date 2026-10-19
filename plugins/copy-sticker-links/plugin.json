@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.copy-sticker-links",
     "name": "Copy Sticker Links",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Copy or open sticker links from context menus.",
     "entrypoints": {
         "renderer": {

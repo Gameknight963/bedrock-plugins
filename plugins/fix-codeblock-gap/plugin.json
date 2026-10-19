@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.fix-codeblock-gap",
     "name": "Fix Codeblock Gap",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Remove the extra gap after code blocks.",
     "entrypoints": {
         "renderer": {

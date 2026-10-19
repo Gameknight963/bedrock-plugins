@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.view-raw",
     "name": "ViewRaw",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "View and copy raw message, user, channel, role and server data.",
     "entrypoints": {
         "renderer": {

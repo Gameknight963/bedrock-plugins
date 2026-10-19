@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.spotify-share-commands",
     "name": "Spotify Share Commands",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Share your current Spotify track, album or artist with slash commands.",
     "entrypoints": {
         "renderer": {

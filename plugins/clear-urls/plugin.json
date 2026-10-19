@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.clear-urls",
     "name": "ClearURLs",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Remove tracking parameters from links you send.",
     "entrypoints": {
         "renderer": {

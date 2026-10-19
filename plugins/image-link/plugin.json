@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.image-link",
     "name": "Image Link",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Keep image links visible alongside their previews.",
     "entrypoints": {
         "renderer": {

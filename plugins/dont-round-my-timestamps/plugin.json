@@ -1,8 +1,8 @@
 {
     "manifestVersion": 3,
     "id": "gameknight963.dont-round-my-timestamps",
-    "name": "Don’t Round My Timestamps",
-    "version": "1.0.3",
+    "name": "Don\u00e2\u20ac\u2122t Round My Timestamps",
+    "version": "1.0.4",
     "description": "Round relative timestamps down instead of to the nearest unit.",
     "entrypoints": {
         "renderer": {

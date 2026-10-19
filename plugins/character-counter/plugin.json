@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.character-counter",
     "name": "Character Counter",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Show the character count and limit beside the chat input.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.silent-typing",
     "name": "Silent Typing",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Stop sending typing indicators to other people.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.no-masked-url-paste",
     "name": "No Masked URL Paste",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Paste links as text instead of turning a selection into a masked link.",
     "entrypoints": {
         "renderer": {
