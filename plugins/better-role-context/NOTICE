@@ -1,0 +1,10 @@
+Better Role Context for Bedrock
+
+Adapted from Vencord/Equicord BetterRoleContext by Vendicated, goodbee and nightmaresan.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/betterRoleContext
+Role-member component extraction adapted from src/plugins/_core/concatenatedComponentExtractor.tsx by sadan.
+
+Copyright (c) 2024-2026 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
