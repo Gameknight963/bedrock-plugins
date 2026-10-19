@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.f8-break",
     "name": "F8 Break",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Pause JavaScript with F8 while debugging Discord.",
     "entrypoints": {
         "renderer": {

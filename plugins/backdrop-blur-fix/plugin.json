@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.backdrop-blur-fix",
     "name": "Backdrop Blur Fix",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Experimental replacement compositing for backdrop blur which fixes bleeding on transparent backgrounds.",
     "entrypoints": {
         "gpu": {
