@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-role-context",
     "name": "Better Role Context",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Add role editing, color copying, icon previews and member lists to role menus.",
     "entrypoints": {
         "renderer": {
