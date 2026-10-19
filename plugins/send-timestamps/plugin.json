@@ -1,0 +1,16 @@
+{
+    "manifestVersion": 3,
+    "id": "gameknight963.send-timestamps",
+    "name": "Send Timestamps",
+    "version": "1.0.0",
+    "description": "Insert timestamps from a date picker or simple time shortcuts.",
+    "entrypoints": {
+        "renderer": {
+            "runtime": "javascript",
+            "path": "renderer.js",
+            "requiresApi": "1.10.0"
+        }
+    },
+    "readme": "README.md",
+    "license": "GPL-3.0-or-later"
+}
