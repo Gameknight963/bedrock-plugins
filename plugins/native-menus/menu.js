@@ -29,6 +29,7 @@ export function readMenu(element) {
         Object.defineProperties(event, { target: { value: row || element }, currentTarget: { value: row || element } });
         return event;
     };
+    const unsupported = name => [{ type: 'placeholder', label: `${name || 'Custom control'} not implemented`, disabled: true }];
     const controls = (node, parent, row, depth) => {
         if (!node || depth > 20) return [];
         if (Array.isArray(node)) return node.flatMap(item => controls(item, parent, row, depth + 1));
@@ -41,6 +42,7 @@ export function readMenu(element) {
             const value = p.value ?? p.initialValue;
             const min = p.minValue ?? defaults.minValue ?? Number(slider?.getAttribute('aria-valuemin') || 0);
             const max = p.maxValue ?? defaults.maxValue ?? Number(slider?.getAttribute('aria-valuemax') || Math.max(100, value));
+            if (![value, min, max].every(Number.isFinite) || max <= min) return unsupported(parent.id || parent.label);
             const step = p.step ?? p.markers?.[1] - p.markers?.[0];
             return [{ type: 'slider', id: register(message => change(message.value)), label: parent.label || text(p['aria-label']),
                 value, min, max, step: Number.isFinite(step) && step > 0 ? step : 1, disabled: !!parent.disabled || !!p.disabled }];
@@ -54,14 +56,18 @@ export function readMenu(element) {
         }
         const children = controls(p.children, parent, row, depth + 1);
         if (children.length) return children;
-        return [{ type: 'placeholder', label: `${parent.id || parent.label || 'Custom control'} not implemented`, disabled: true }];
+        return unsupported(parent.id || parent.label);
     };
     const read = (children, depth = 0) => {
-        if (depth > 20) throw new Error('Menu nesting exceeds twenty levels.');
+        if (depth > 20) return unsupported('Nested menu');
         if (children == null || typeof children === 'boolean') return [];
         if (Array.isArray(children)) return children.flatMap(child => read(child, depth + 1));
         if (typeof children !== 'object' || !children.props) return [];
         const p = children.props;
+        try { return readItem(p, depth); }
+        catch { return unsupported(p.id || text(p.label)); }
+    };
+    const readItem = (p, depth) => {
         if (p.id == null) {
             if (p.children == null) return [{ type: 'separator' }];
             const group = read(p.children, depth + 1);
@@ -80,15 +86,15 @@ export function readMenu(element) {
                     onInteraction: props.onInteraction, tabIndex: -1 }, null);
                 const result = controls(content, { ...p, label }, row, depth + 1);
                 return result.length || content == null || typeof content === 'boolean' ? result :
-                    [{ type: 'placeholder', label: `${p.id || label || 'Custom control'} not implemented`, disabled: true }];
+                    unsupported(p.id || label);
             } catch {
-                return [{ type: 'placeholder', label: `${p.id || label || 'Custom control'} not implemented`, disabled: true }];
+                return unsupported(p.id || label);
             }
         }
         const nested = read(p.children, depth + 1);
+        if (!label) return unsupported(p.id);
         const action = typeof p.action === 'function' ? p.action : null;
         const id = action ? register(message => action(eventFor(message, row))) : String(++sequence);
-        if (!label && !nested.length) throw new Error(`Menu item ${p.id} has no readable label.`);
         return [{ type: p.checked != null ? p.group != null ? 'radio' : 'checkbox' : 'item', id, label,
             description: text(p.subtext), hasAction: !!action, disabled: !!p.disabled, checked: !!p.checked,
             dangerous: p.color === 'danger', keepOpenOnShift: !!p.dontCloseOnActionIfHoldingShiftKey, children: nested }];

@@ -43,6 +43,31 @@ internal static class MenuBlur
 
 internal sealed class DesktopMenu(bool transparent) : ContextMenuStrip
 {
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+
+    internal void CheckActivation()
+    {
+        if (IsDisposed || !Visible) return;
+        Control? foreground = Control.FromChildHandle(GetForegroundWindow());
+        ToolStripDropDown? dropdown = foreground?.TopLevelControl as ToolStripDropDown;
+        while (dropdown != null)
+        {
+            if (dropdown == this) return;
+            dropdown = dropdown.OwnerItem?.Owner as ToolStripDropDown;
+        }
+        Close(ToolStripDropDownCloseReason.AppFocusChange);
+    }
+
+    protected override void WndProc(ref Message message)
+    {
+        bool lostActivation = (message.Msg == 0x0006 && (message.WParam.ToInt64() & 0xffff) == 0) ||
+            (message.Msg == 0x001c && message.WParam == IntPtr.Zero) || message.Msg == 0x0008;
+        base.WndProc(ref message);
+        // Electron has a separate message loop; WinForms' menu filter cannot observe its outside clicks.
+        if (lostActivation && Visible && !IsDisposed) BeginInvoke(new Action(CheckActivation));
+    }
+
     protected override void OnHandleCreated(EventArgs args)
     {
         base.OnHandleCreated(args);
@@ -52,6 +77,18 @@ internal sealed class DesktopMenu(bool transparent) : ContextMenuStrip
 
 internal sealed class DesktopDropDown(bool transparent) : ToolStripDropDownMenu
 {
+    protected override void WndProc(ref Message message)
+    {
+        bool lostActivation = (message.Msg == 0x0006 && (message.WParam.ToInt64() & 0xffff) == 0) ||
+            (message.Msg == 0x001c && message.WParam == IntPtr.Zero) || message.Msg == 0x0008;
+        base.WndProc(ref message);
+        if (!lostActivation || IsDisposed || !Visible) return;
+        ToolStripDropDown? root = OwnerItem?.Owner as ToolStripDropDown;
+        while (root?.OwnerItem?.Owner is ToolStripDropDown parent) root = parent;
+        if (root is DesktopMenu menu && !menu.IsDisposed && menu.Visible)
+            menu.BeginInvoke(new Action(menu.CheckActivation));
+    }
+
     protected override void OnHandleCreated(EventArgs args)
     {
         base.OnHandleCreated(args);

@@ -24,9 +24,10 @@ export function start(ctx) {
         const channels = colors.getImageData(0, 0, 1, 1).data;
         return channels[3] ? '#' + Array.from(channels.slice(0, 3), channel => channel.toString(16).padStart(2, '0')).join('') : fallback;
     };
-    const close = (record, dismiss = true) => {
-        if (!record) return;
-        sessions.delete(record.session);
+    const close = (record, dismiss = true, notify = true) => {
+        if (!record || !sessions.delete(record.session)) return;
+        if (notify) ctx.events.emit('native-menus.request', { kind: 'close', client, session: record.session })
+            .catch(error => ctx.log.error('Could not close the desktop menu.', error));
         record.element.style.visibility = record.visibility;
         if (dismiss && record.element.isConnected) record.menu.props.onClose?.();
     };
@@ -34,6 +35,7 @@ export function start(ctx) {
         if (!active || handled.has(element)) return;
         const menu = readMenu(element);
         if (!menu || !menu.items.length) return;
+        for (const record of sessions.values()) close(record);
         handled.add(element);
         const session = crypto.randomUUID();
         const bounds = element.getBoundingClientRect();
@@ -51,6 +53,7 @@ export function start(ctx) {
             .catch(error => { close(record, false); ctx.log.error('Could not open the desktop menu.', error); });
     };
     const scan = () => {
+        for (const record of sessions.values()) if (!record.element.isConnected) close(record, false);
         for (const element of document.querySelectorAll('[role="menu"]')) {
             try { open(element); }
             catch (error) { handled.add(element); ctx.log.error('Could not translate this Discord menu.', error); }
@@ -63,8 +66,8 @@ export function start(ctx) {
         if (!active || message?.client !== client) return;
         const record = sessions.get(message.session);
         if (!record) return;
-        if (message.kind === 'closed') { close(record); return; }
-        if (message.kind === 'error') { close(record, false); ctx.log.error(message.message); return; }
+        if (message.kind === 'closed') { close(record, true, false); return; }
+        if (message.kind === 'error') { close(record, false, false); ctx.log.error(message.message); return; }
         const action = record.menu.actions.get(message.id);
         if (!action) return;
         try {
@@ -75,7 +78,21 @@ export function start(ctx) {
             if (selected) record.menu.props.onSelect?.();
         } catch (error) { close(record); ctx.log.error('The menu action failed.', error); }
     });
+    const dismiss = () => { for (const record of sessions.values()) close(record); };
+    const keydown = event => {
+        if (!sessions.size) return;
+        if (['Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        dismiss();
+    };
+    document.addEventListener('pointerdown', dismiss, true);
+    document.addEventListener('keydown', keydown, true);
+    window.addEventListener('pagehide', dismiss);
     ctx.cleanup(() => {
+        document.removeEventListener('pointerdown', dismiss, true);
+        document.removeEventListener('keydown', keydown, true);
+        window.removeEventListener('pagehide', dismiss);
         active = false; observer.disconnect();
         for (const record of sessions.values()) close(record);
     });

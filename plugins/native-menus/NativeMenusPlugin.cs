@@ -89,8 +89,8 @@ public sealed class NativeMenusPlugin : Plugin
     public override IReadOnlyList<SettingDefinition> Settings => [Transparency];
     private readonly Dictionary<string, PluginWindow> clients = new();
     private PluginContext context = null!;
-    private Form keyboardOwner = null!;
     private ContextMenuStrip? current;
+    private Command? currentCommand;
     private IDisposable? requests;
     private IDisposable? changes;
     private bool transparent;
@@ -126,17 +126,8 @@ public sealed class NativeMenusPlugin : Plugin
     {
         this.context = context;
         transparent = await context.Settings.GetAsync(Transparency);
-        await context.InvokeUIAsync(CreateOwner);
         requests = context.Subscribe("native-menus.request", ReceiveAsync);
         changes = context.Subscribe("settings.changed", SettingsChangedAsync);
-    }
-
-    private void CreateOwner()
-    {
-        // ToolStrip needs a window on its own thread to receive keyboard input.
-        keyboardOwner = new Form { FormBorderStyle = FormBorderStyle.None, ShowInTaskbar = false,
-            StartPosition = FormStartPosition.Manual, Size = new Size(1, 1) };
-        _ = keyboardOwner.Handle;
     }
 
     private async Task SettingsChangedAsync(PluginEvent value)
@@ -153,7 +144,17 @@ public sealed class NativeMenusPlugin : Plugin
         if (command == null) return;
         try
         {
-            if (command.Kind != "show" || !Guid.TryParse(command.Client, out _) || !Guid.TryParse(command.Session, out _) ||
+            if (!Guid.TryParse(command.Client, out _) || !Guid.TryParse(command.Session, out _))
+                throw new InvalidOperationException("Invalid menu identity.");
+            if (command.Kind == "close")
+            {
+                await context.InvokeUIAsync(() => {
+                    if (currentCommand?.Client == command.Client && currentCommand.Session == command.Session)
+                        current?.Close();
+                });
+                return;
+            }
+            if (command.Kind != "show" ||
                 !double.IsFinite(command.X) || !double.IsFinite(command.Y) || !double.IsFinite(command.PixelRatio) ||
                 command.PixelRatio <= 0 || command.PixelRatio > 16) throw new InvalidOperationException("Invalid menu request.");
             PluginWindow owner = await OwnerAsync(command.Client);
@@ -202,6 +203,7 @@ public sealed class NativeMenusPlugin : Plugin
             current?.Close();
             ContextMenuStrip menu = new DesktopMenu(transparent) { ShowImageMargin = true, ShowCheckMargin = false };
             current = menu;
+            currentCommand = command;
             Color background = ColorTranslator.FromHtml(command.Background);
             Color foreground = ColorTranslator.FromHtml(command.Foreground);
             menu.BackColor = transparent ? Color.FromArgb(0, background) : background;
@@ -209,37 +211,35 @@ public sealed class NativeMenusPlugin : Plugin
             menu.Renderer = new MenuRenderer(background, transparent);
             AddItems(menu.Items, command.Items, menu, command, background, foreground, 0);
             menu.Closing += (sender, args) => KeepReactionOpen(menu, args);
-            menu.Closed += (sender, args) => Closed(menu, command, args.CloseReason);
             Point anchor = new(checked((int)Math.Round(command.X * command.PixelRatio, MidpointRounding.AwayFromZero)), checked((int)Math.Round(command.Y * command.PixelRatio, MidpointRounding.AwayFromZero)));
             IntPtr source = new(long.Parse(command.Owner));
             if (!ClientToScreen(source, ref anchor)) throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "Could not locate the menu anchor.");
-            keyboardOwner.Location = anchor;
-            if (long.TryParse(command.Owner, out long owner))
-                SetWindowLongPtr(keyboardOwner.Handle, -8, new IntPtr(owner));
-            keyboardOwner.Show();
-            FocusMenu(new IntPtr(owner));
-            menu.Show(keyboardOwner, keyboardOwner.PointToClient(anchor));
-            menu.Focus();
+            menu.Show(anchor);
+            // Show() assigns WinForms' own owner, so set the Electron owner afterwards.
+            SetWindowLongPtr(menu.Handle, -8, source);
+            FocusMenu(menu, source);
+            menu.Closed += (sender, args) => Closed(menu, command, args.CloseReason);
             Write(new { kind = "shown", client = command.Client, session = command.Session });
         }
         catch (Exception exception)
         {
-            current?.Dispose(); current = null;
-            keyboardOwner.Hide();
-            if (long.TryParse(command.Owner, out long owner) && owner != 0) SetForegroundWindow(new IntPtr(owner));
+            current?.Dispose(); current = null; currentCommand = null;
             Write(new { kind = "error", client = command.Client, session = command.Session, message = exception.Message });
         }
     }
 
-    private void FocusMenu(IntPtr owner)
+    private void FocusMenu(ContextMenuStrip menu, IntPtr owner)
     {
         uint thread = GetCurrentThreadId();
         uint ownerThread = GetWindowThreadProcessId(owner, IntPtr.Zero);
         // The menu and Discord have separate UI threads. Join their input queues only while transferring focus.
         bool attached = owner != IntPtr.Zero && GetForegroundWindow() == owner && ownerThread != thread &&
             AttachThreadInput(thread, ownerThread, true);
-        try { SetForegroundWindow(keyboardOwner.Handle); keyboardOwner.Activate(); }
+        bool activated;
+        try { activated = SetForegroundWindow(menu.Handle) && menu.Focus(); }
         finally { if (attached) AttachThreadInput(thread, ownerThread, false); }
+        if (!activated || !menu.Visible || GetForegroundWindow() != menu.Handle || !menu.ContainsFocus)
+            throw new InvalidOperationException("Windows did not give the menu keyboard focus. Discord's original menu has been restored.");
     }
 
     private void AddItems(ToolStripItemCollection target, List<MenuNode> nodes, ContextMenuStrip root,
@@ -312,7 +312,6 @@ public sealed class NativeMenusPlugin : Plugin
         if (!node.KeepOpenOnShift || (Modifiers() & Keys.Shift) == 0)
         {
             menu.Close(ToolStripDropDownCloseReason.ItemClicked);
-            if (long.TryParse(command.Owner, out long owner) && owner != 0) SetForegroundWindow(new IntPtr(owner));
         }
     }
 
@@ -342,10 +341,13 @@ public sealed class NativeMenusPlugin : Plugin
 
     private void Closed(ContextMenuStrip menu, Command command, ToolStripDropDownCloseReason reason)
     {
-        if (current == menu) current = null;
-        keyboardOwner.Hide();
+        if (current == menu) { current = null; currentCommand = null; }
         if ((reason == ToolStripDropDownCloseReason.ItemClicked || reason == ToolStripDropDownCloseReason.Keyboard) &&
-            long.TryParse(command.Owner, out long owner) && owner != 0) SetForegroundWindow(new IntPtr(owner));
+            long.TryParse(command.Owner, out long owner) && owner != 0)
+        {
+            IntPtr foreground = GetForegroundWindow();
+            if (foreground == menu.Handle || foreground == new IntPtr(owner)) SetForegroundWindow(new IntPtr(owner));
+        }
         // ToolStrip closes before invoking the selected item's Click handler.
         _ = context.InvokeUIAsync(() => FinishClosed(menu, command, reason));
     }
@@ -367,8 +369,7 @@ public sealed class NativeMenusPlugin : Plugin
     private void CloseMenus()
     {
         ContextMenuStrip? menu = current;
-        menu?.Close(); menu?.Dispose(); current = null;
-        keyboardOwner?.Dispose();
+        menu?.Close(); menu?.Dispose(); current = null; currentCommand = null;
     }
 
     private void Write(object message) => _ = WriteAsync(message);
