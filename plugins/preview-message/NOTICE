@@ -1,0 +1,10 @@
+Preview Message for Bedrock
+
+Adapted from Vencord/Equicord PreviewMessage by Aria.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/previewMessage
+Includes the local message helper pattern from src/api/Commands/commandHelpers.ts.
+
+Copyright (c) 2022-2023 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-19
