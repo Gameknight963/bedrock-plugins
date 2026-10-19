@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.6887863">
+  <PropertyGroup>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunNpmAudit>false</ShouldRunNpmAudit>
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**;**/node_modules/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <Import Project="..\..\tools\TypeScript.targets" />
+  <Target Name="DeclarePluginFiles" BeforeTargets="PackagePlugin">
+    <ItemGroup>
+      <_CompiledScript Include="obj/runtime/*.js" />
+      <_GifencFile Include="vendor/gifenc/*.js;vendor/gifenc/LICENSE.md" />
+      <PluginFile Include="plugin.json;README.md;LICENSE;NOTICE;package.json" />
+      <PluginFile Include="@(_CompiledScript)"><PackagePath>%(_CompiledScript.Filename)%(_CompiledScript.Extension)</PackagePath></PluginFile>
+      <PluginFile Include="THIRD_PARTY_NOTICES.md" />
+      <PluginFile Include="@(_GifencFile)"><PackagePath>vendor/gifenc/%(_GifencFile.Filename)%(_GifencFile.Extension)</PackagePath></PluginFile>
+    </ItemGroup>
+  </Target>
+  <Import Project="..\..\tools\Plugin.targets" />
+</Project>
