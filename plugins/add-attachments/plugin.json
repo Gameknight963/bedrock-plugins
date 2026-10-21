@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.add-attachments",
     "name": "Add Attachments",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Add attachments to messages you have already sent.",
     "entrypoints": {
         "renderer": {

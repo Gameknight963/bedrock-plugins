@@ -16,7 +16,7 @@ interface Rest {
 }
 let context: RendererContext;
 const inputs = new Set<HTMLInputElement>();
-const uploads = new Set<string>();
+let uploads = new Set<string>();
 
 function find<T>(predicate: (value: any) => boolean, description: string): T {
     const value = context.webpack.find<T>(predicate);
@@ -49,15 +49,16 @@ function UploadIcon({ width = 24, height = 24 }: { width?: number; height?: numb
 
 export async function addAttachments(channelId: string, messageId: string, files: ArrayLike<File>): Promise<void> {
     const ctx = context;
+    const pending = uploads;
     const selected = Array.from(files);
     if (!selected.length || ctx.signal.aborted) return;
     const key = `${channelId}:${messageId}`;
-    if (uploads.has(key)) throw new Error('An attachment upload for this message is already in progress.');
+    if (pending.has(key)) throw new Error('An attachment upload for this message is already in progress.');
     const message = messageFor(channelId, messageId);
     if (!canAddAttachments(message)) throw new Error('This message cannot accept more attachments. It must be your own regular message or reply, with fewer than ten attachments.');
     const available = 10 - message!.attachments.length;
     if (selected.length > available) throw new Error(`You selected ${selected.length} files, but this message only has room for ${available} more attachment${available === 1 ? '' : 's'}.`);
-    uploads.add(key);
+    pending.add(key);
     const progress = ctx.notifications.show({ title: 'Uploading attachments', body: selected.map(file => file.name).join(', '), timeout: 0 });
     try {
         const rest = find<Rest>(value => typeof value?.post === 'function' && typeof value?.patch === 'function' && typeof value?.del === 'function', 'message API');
@@ -91,11 +92,12 @@ export async function addAttachments(channelId: string, messageId: string, files
         if (latest.attachments.length + added.length > 10) throw new Error(`The message now has ${latest.attachments.length} attachments; adding ${added.length} would exceed the limit of ten.`);
         await rest.patch({ url: `/channels/${channelId}/messages/${messageId}`, body: { attachments: [...latest.attachments, ...added] } });
         if (!ctx.signal.aborted) ctx.notifications.show({ title: `${selected.length === 1 ? 'Attachment' : 'Attachments'} added`, type: 'success' });
-    } finally { uploads.delete(key); progress.close(); }
+    } finally { pending.delete(key); progress.close(); }
 }
 
 function chooseAttachments(message: Message): void {
     const ctx = context;
+    if (!canAddAttachments(message)) return;
     const input = document.createElement('input');
     input.type = 'file'; input.accept = '*/*'; input.multiple = true;
     inputs.add(input);
@@ -104,6 +106,7 @@ function chooseAttachments(message: Message): void {
     input.addEventListener('change', () => {
         const files = Array.from(input.files ?? []);
         remove();
+        if (ctx !== context || ctx.signal.aborted) return;
         void addAttachments(message.channel_id, message.id, files).catch(error => report(error, ctx));
     }, { once: true });
     input.click();
@@ -119,6 +122,7 @@ function handlePaste(event: ClipboardEvent): void {
 }
 export function start(ctx: RendererContext): void {
     context = ctx;
+    uploads = new Set();
     document.addEventListener('paste', handlePaste, { capture: true });
     ctx.messages.addButton('add-attachments', ({ message }) => {
         const item = message as unknown as Message;
