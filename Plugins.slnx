@@ -100,4 +100,25 @@
   <Project Path="plugins/role-color-everywhere/RoleColorEverywhere.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/show-connections/ShowConnections.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/typing-indicator/TypingIndicator.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/add-attachments/AddAttachments.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/anonymise-file-names/AnonymiseFileNames.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-gif-picker/BetterGifPicker.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/better-sessions/BetterSessions.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/custom-idle/CustomIdle.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/export-messages/ExportMessages.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/friend-invites/FriendInvites.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/gif-paste/GifPaste.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/hide-media/HideMedia.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/hide-messages/HideMessages.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/message-link-tooltip/MessageLinkTooltip.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/message-notifier/MessageNotifier.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/mutual-group-dms/MutualGroupDMs.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/new-guild-settings/NewGuildSettings.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/no-server-emojis/NoServerEmojis.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/open-in-app/OpenInApp.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/server-info/ServerInfo.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/server-list-indicators/ServerListIndicators.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/sticker-paste/StickerPaste.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/relationship-notifier/RelationshipNotifier.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/theme-attributes/ThemeAttributes.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
