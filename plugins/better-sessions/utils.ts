@@ -38,6 +38,7 @@ export function saveSessionsToDataStore() {
 }
 
 let cacheOwner: string | undefined;
+export function getCacheOwner(): string | undefined { return cacheOwner; }
 export function clearCache(): void { cacheOwner = undefined; savedSessionsCache.clear(); }
 export function fetchNamesFromDataStore(id: string): void {
     clearCache(); cacheOwner = id;

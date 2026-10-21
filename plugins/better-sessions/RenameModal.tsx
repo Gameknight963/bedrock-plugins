@@ -16,19 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { TextButton, Heading, Modal, React, TextInput } from "./discord.js";
+import { TextButton, Heading, Modal, React, TextInput, getContext } from "./discord.js";
 
 import { SessionInfo } from "./types.js";
-import { getDefaultName, savedSessionsCache, saveSessionsToDataStore } from "./utils.js";
+import { getDefaultName, savedSessionsCache, saveSessionsToDataStore, getCacheOwner } from "./utils.js";
 type RenderModalProps = any;
 
 
 
 export function RenameModal({ props, session, state }: { props: RenderModalProps, session: SessionInfo["session"], state: [string, (value: string) => void]; }) {
     const [title, setTitle] = state;
+    const [ownerId] = React.useState(getCacheOwner);
     const [value, setValue] = React.useState(savedSessionsCache.get(session.id_hash)?.name ?? "");
 
     function onSaveClick() {
+        if (!ownerId || getContext().signal.aborted || ownerId !== getCacheOwner()) {
+            props.onClose();
+            return;
+        }
         savedSessionsCache.set(session.id_hash, { name: value, isNew: false });
         if (value !== "") {
             setTitle(`${value}*`);

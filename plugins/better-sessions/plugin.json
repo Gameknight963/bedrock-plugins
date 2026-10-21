@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-sessions",
     "name": "Better Sessions",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Name your devices, see exact session timestamps and get notified about new sessions.",
     "entrypoints": {
         "renderer": {
