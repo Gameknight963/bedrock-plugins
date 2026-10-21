@@ -3,7 +3,7 @@ import type { RendererContext, SourcePatch } from '@bedrock/renderer';
 import { accountTarget, linkTarget } from './rules.js';
 import { settings } from './settings.js';
 export { settings };
-let context: RendererContext;
+let context: RendererContext | undefined;
 const identifier = '(?:[A-Za-z_$][\\w$]*)';
 const re = (source: string) => new RegExp(source.replaceAll('\\i', identifier));
 export const patches: SourcePatch[] = [
@@ -21,6 +21,7 @@ export const patches: SourcePatch[] = [
 
 function request(value: Record<string, unknown>): Promise<void> {
     const ctx = context;
+    if (!ctx || ctx.signal.aborted) return Promise.reject(new Error('Open In App is not active.'));
     const requestId = crypto.randomUUID();
     return new Promise((resolve, reject) => {
         let unsubscribe = () => {};
@@ -51,7 +52,7 @@ function report(error: unknown, ctx: RendererContext): void {
     ctx.notifications.show({ title: 'Could not open link in app', body: message, type: 'error' });
 }
 export async function handleLink(data: { href?: string } | undefined, event?: { preventDefault(): void }): Promise<boolean> {
-    if (context.signal.aborted || typeof data?.href !== 'string') return false;
+    if (!context || context.signal.aborted || typeof data?.href !== 'string') return false;
     const target = linkTarget(data.href);
     if (!target || !settings.store[target.app]) return false;
     const ctx = context;
@@ -61,7 +62,7 @@ export async function handleLink(data: { href?: string } | undefined, event?: { 
     return true;
 }
 export function handleAccountView(event: { preventDefault(): void }, platform: string, accountId: string): boolean {
-    if (context.signal.aborted || !settings.store[platform]) return false;
+    if (!context || context.signal.aborted || !settings.store[platform]) return false;
     try {
         if (!accountTarget(platform, accountId)) return false;
         event.preventDefault();
@@ -71,3 +72,5 @@ export function handleAccountView(event: { preventDefault(): void }, platform: s
     } catch (error) { report(error, context); return false; }
 }
 export function start(ctx: RendererContext): void { context = ctx; }
+
+export function stop(): void { context = undefined; }

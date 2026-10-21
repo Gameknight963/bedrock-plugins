@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.show-connections",
     "name": "Show Connections",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show connected accounts as compact profile icons.",
     "entrypoints": {
         "renderer": {

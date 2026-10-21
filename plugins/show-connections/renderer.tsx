@@ -183,6 +183,16 @@ function CompactConnectionComponent({ connection, theme }: { connection: Connect
                             {...tooltipProps}
                             className="vc-user-connection"
                             href={url}
+                            onClick={event => {
+                                if (!isActive()) return;
+                                const runtime = Bedrock as unknown as {
+                                    plugins: { list(): Array<{ manifest: { id: string }; enabled: boolean }> };
+                                    _sourcePlugin?(id: string): { handleAccountView?(event: unknown, platform: string, accountId: string): boolean };
+                                };
+                                const id = "gameknight963.open-in-app";
+                                if (runtime.plugins.list().some(plugin => plugin.manifest.id === id && plugin.enabled))
+                                    runtime._sourcePlugin?.(id)?.handleAccountView?.(event, connection.type, connection.id);
+                            }}
                             target="_blank"
                             rel="noreferrer"
                         >
