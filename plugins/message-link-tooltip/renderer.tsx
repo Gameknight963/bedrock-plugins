@@ -30,11 +30,16 @@ export async function loadMessage(channelId: string, messageId: string): Promise
     if (existing) return existing;
     const rest = find(value => value?.get && value?.del && value?.put, 'HTTP client');
     const task = (async () => {
-        const response = await rest.get({ url: `/channels/${channelId}/messages`, query: { limit: 1, around: messageId }, retries: 2 });
+        let response: any;
+        try { response = await rest.get({ url: `/channels/${channelId}/messages`, query: { limit: 1, around: messageId }, retries: 2 }); }
+        catch (error) { throw new Error(`Could not fetch message ${messageId} from channel ${channelId}: ${error instanceof Error ? error.message : String(error)}`); }
         if (activation !== context || activation.signal.aborted) return;
-        const raw = response?.body?.find((value: any) => value.id === messageId && value.channel_id === channelId);
+        if (!Array.isArray(response?.body)) throw new Error(`Could not load message ${messageId} from channel ${channelId}: expected a message array, received ${response?.body === null ? 'null' : typeof response?.body}.`);
+        const raw = response.body.find((value: any) => value?.id === messageId && value.channel_id === channelId);
         if (!raw) throw new Error(`Message ${messageId} was not found in channel ${channelId}.`);
-        return messages.getMessages(channelId).receiveMessage(raw).get(messageId);
+        const message = messages.getMessages(channelId).receiveMessage(raw).get(messageId);
+        if (!message) throw new Error(`Discord could not create a preview record for message ${messageId} in channel ${channelId}.`);
+        return message;
     })();
     pending.set(key, task);
     try { return await task; } finally { if (pending.get(key) === task) pending.delete(key); }
