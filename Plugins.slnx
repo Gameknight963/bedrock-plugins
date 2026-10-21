@@ -121,4 +121,5 @@
   <Project Path="plugins/sticker-paste/StickerPaste.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/relationship-notifier/RelationshipNotifier.esproj"><Platform Project="AnyCPU" /></Project>
   <Project Path="plugins/theme-attributes/ThemeAttributes.esproj"><Platform Project="AnyCPU" /></Project>
+  <Project Path="plugins/client-theme/ClientTheme.esproj"><Platform Project="AnyCPU" /></Project>
 </Solution>
