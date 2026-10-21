@@ -1,0 +1,10 @@
+Relationship Notifier for Bedrock
+
+Adapted from Vencord/Equicord RelationshipNotifier by nick, with NoticesAPI integration by Vendicated.
+https://github.com/Equicord/Equicord/tree/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/plugins/relationshipNotifier
+https://github.com/Equicord/Equicord/blob/e0e85c8d4f6dc73aac9368cf3f4b2200eac4d4b4/src/api/Notices.tsx
+
+Copyright (c) 2022, 2023 Vendicated and contributors
+GPL-3.0-or-later. See LICENSE
+
+Modified for Bedrock on 2026-10-21
