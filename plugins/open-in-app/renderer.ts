@@ -19,20 +19,20 @@ export const patches: SourcePatch[] = [
     }))
 ];
 
-function request(value: Record<string, unknown>): Promise<void> {
+function request(value: Record<string, unknown>): Promise<boolean> {
     const ctx = context;
     if (!ctx || ctx.signal.aborted) return Promise.reject(new Error('Open In App is not active.'));
     const requestId = crypto.randomUUID();
     return new Promise((resolve, reject) => {
         let unsubscribe = () => {};
         let finished = false;
-        const finish = (error?: Error) => {
+        const finish = (error?: Error, inApp = false) => {
             if (finished) return;
             finished = true;
             clearTimeout(timer);
             unsubscribe();
             ctx.signal.removeEventListener('abort', abort);
-            if (error) reject(error); else resolve();
+            if (error) reject(error); else resolve(inApp);
         };
         const abort = () => finish(new Error('Open In App was disabled before the link opened.'));
         const timer = setTimeout(() => finish(new Error(`The main process did not respond within 20 seconds while opening ${JSON.stringify(value.url ?? `${value.platform}:${value.accountId}`)}.`)), 20000);
@@ -40,7 +40,7 @@ function request(value: Record<string, unknown>): Promise<void> {
         if (ctx.signal.aborted) { abort(); return; }
         unsubscribe = ctx.events.on('open-in-app.response', ({ id, value: response }) => {
             if (id !== ctx.id || response?.requestId !== requestId) return;
-            finish(typeof response.error === 'string' ? new Error(response.error) : response.opened === true ? undefined : new Error('Open In App received a response without an opening result.'));
+            finish(typeof response.error === 'string' ? new Error(response.error) : response.opened === true ? undefined : new Error('Open In App received a response without an opening result.'), response.inApp === true);
         });
         void ctx.events.emit('open-in-app.request', { ...value, requestId }).catch(error => finish(error instanceof Error ? error : new Error(String(error))));
     });
@@ -51,13 +51,25 @@ function report(error: unknown, ctx: RendererContext): void {
     ctx.log.error(message);
     ctx.notifications.show({ title: 'Could not open link in app', body: message, type: 'error' });
 }
+function openedToast(ctx: RendererContext): void {
+    if (ctx.signal.aborted) return;
+    const show = ctx.webpack.find<(toast: unknown) => void>(value => typeof value === 'function' && String(value).includes('.currentToastMap.has('));
+    const create = ctx.webpack.find<(text: string, type: string) => unknown>(value => typeof value === 'function' && String(value).includes('variant:"default",icon:') && String(value).includes('.duration'));
+    if (show) {
+        if (create) {
+            try { show(create('Opened link in native app', 'success')); return; }
+            catch { /* Discord has shipped two different toast payload formats. */ }
+        }
+        show({ text: 'Opened link in native app', variant: 'success' });
+    } else ctx.notifications.show({ title: 'Opened link in native app', type: 'success', timeout: 2500 });
+}
 export async function handleLink(data: { href?: string } | undefined, event?: { preventDefault(): void }): Promise<boolean> {
     if (!context || context.signal.aborted || typeof data?.href !== 'string') return false;
     const target = linkTarget(data.href);
     if (!target || !settings.store[target.app]) return false;
     const ctx = context;
     event?.preventDefault();
-    try { await request({ kind: 'link', url: data.href }); }
+    try { if (await request({ kind: 'link', url: data.href })) openedToast(ctx); }
     catch (error) { report(error, ctx); }
     return true;
 }

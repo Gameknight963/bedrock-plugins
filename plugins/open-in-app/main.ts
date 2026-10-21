@@ -45,7 +45,7 @@ export function start(ctx: MainContext): void {
                     if (!target?.uri || !ctx.settings.get(target.app, true)) {
                         if (ctx.signal.aborted) return;
                         await shell.openExternal(resolved);
-                        await ctx.events.emit('open-in-app.response', { requestId: value.requestId, opened: true });
+                        await ctx.events.emit('open-in-app.response', { requestId: value.requestId, opened: true, inApp: false });
                         return;
                     }
                 }
@@ -55,7 +55,7 @@ export function start(ctx: MainContext): void {
             if (ctx.signal.aborted) return;
             try { await shell.openExternal(target.uri); }
             catch (error) { throw new Error(`Could not open ${JSON.stringify(target.uri)}: ${error instanceof Error ? error.message : String(error)}`, { cause: error }); }
-            if (!ctx.signal.aborted) await ctx.events.emit('open-in-app.response', { requestId: value.requestId, opened: true });
+            if (!ctx.signal.aborted) await ctx.events.emit('open-in-app.response', { requestId: value.requestId, opened: true, inApp: true });
         } catch (error) {
             if (!ctx.signal.aborted) await ctx.events.emit('open-in-app.response', { requestId: value.requestId, error: error instanceof Error ? error.message : String(error) });
         }
