@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.no-typing-animation",
     "name": "No Typing Animation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Stop the typing dots from animating.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.force-owner-crown",
     "name": "Force Owner Crown",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show the server owner crown even when Discord would normally hide it.",
     "entrypoints": {
         "renderer": {

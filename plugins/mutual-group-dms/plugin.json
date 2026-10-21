@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.mutual-group-dms",
     "name": "Mutual Group DMs",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show the group chats you share with someone in their profile and DM sidebar.",
     "entrypoints": {
         "renderer": {

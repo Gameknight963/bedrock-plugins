@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.who-reacted",
     "name": "WhoReacted",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Show the avatars of users who reacted to a message.",
     "entrypoints": {
         "renderer": {

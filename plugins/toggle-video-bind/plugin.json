@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.toggle-video-bind",
     "name": "Toggle Video Bind",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Toggle your webcam with a configurable keyboard shortcut.",
     "entrypoints": {
         "renderer": {

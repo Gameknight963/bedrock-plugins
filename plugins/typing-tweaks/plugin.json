@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.typing-tweaks",
     "name": "Typing Tweaks",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show avatars and role colors in the chat typing indicator.",
     "entrypoints": {
         "renderer": {

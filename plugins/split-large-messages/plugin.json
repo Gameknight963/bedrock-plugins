@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.split-large-messages",
     "name": "Split Large Messages",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Split oversized messages into parts before sending.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.no-server-emojis",
     "name": "No Server Emojis",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Choose whether autocomplete shows Unicode emojis, current-server emojis or every server emoji.",
     "entrypoints": {
         "renderer": {

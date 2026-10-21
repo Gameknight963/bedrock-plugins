@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.gif-paste",
     "name": "GIF Paste",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Put selected GIFs in the chat box instead of sending them immediately.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.always-expand-roles",
     "name": "Always Expand Roles",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Expand the role list in profile popouts by default.",
     "entrypoints": {
         "renderer": {

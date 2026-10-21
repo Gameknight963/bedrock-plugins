@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.hide-media",
     "name": "Hide Media",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Hide media in individual messages using a message hover button.",
     "entrypoints": {
         "renderer": {

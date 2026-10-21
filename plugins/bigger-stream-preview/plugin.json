@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.bigger-stream-preview",
     "name": "Bigger Stream Preview",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Open stream previews in the full-size image viewer.",
     "entrypoints": {
         "renderer": {

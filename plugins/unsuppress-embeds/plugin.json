@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.unsuppress-embeds",
     "name": "Unsuppress Embeds",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show or hide message embeds from the message context menu.",
     "entrypoints": {
         "renderer": {

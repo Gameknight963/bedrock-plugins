@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.view-icons",
     "name": "View Icons",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Open avatars, banners and icons in the image viewer.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.message-link-tooltip",
     "name": "Message Link Tooltip",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Preview messages when hovering over links, replies and forwards.",
     "entrypoints": {
         "renderer": {

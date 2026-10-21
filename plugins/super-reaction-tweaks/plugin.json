@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.super-reaction-tweaks",
     "name": "Super Reaction Tweaks",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Choose how many Super Reactions play at once and make them the default.",
     "entrypoints": {
         "renderer": {

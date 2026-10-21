@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.blur-nsfw",
     "name": "Blur NSFW",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Blur attachments in age-restricted channels until you hover over them.",
     "entrypoints": {
         "renderer": {

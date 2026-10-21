@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-gif-picker",
     "name": "Better GIF Picker",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Open the GIF picker to favorites by default.",
     "entrypoints": {
         "renderer": {

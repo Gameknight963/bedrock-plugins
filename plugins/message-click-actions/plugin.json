@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.message-click-actions",
     "name": "Message Click Actions",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Customize single, double and triple click actions on messages.",
     "entrypoints": {
         "main": {

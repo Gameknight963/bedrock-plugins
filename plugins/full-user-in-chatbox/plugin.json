@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.full-user-in-chatbox",
     "name": "Full User in Chatbox",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Click mentions in the message box to open profiles, or right-click them for user actions.",
     "entrypoints": {
         "renderer": {

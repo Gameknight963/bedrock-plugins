@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.show-timeout-duration",
     "name": "Show Timeout Duration",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Show how much longer a user's timeout will last, beside the timeout icon or in its tooltip.",
     "entrypoints": {
         "renderer": {

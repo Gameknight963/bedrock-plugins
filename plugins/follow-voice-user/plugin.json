@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.follow-voice-user",
     "name": "Follow Voice User",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Follow a friend when they switch voice channels.",
     "entrypoints": {
         "renderer": {

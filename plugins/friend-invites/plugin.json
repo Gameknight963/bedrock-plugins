@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.friend-invites",
     "name": "Friend Invites",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Create and manage friend invite links with slash commands.",
     "entrypoints": {
         "renderer": {

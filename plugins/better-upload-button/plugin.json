@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.better-upload-button",
     "name": "Better Upload Button",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Upload files with one click and open the attachment menu with right-click.",
     "entrypoints": {
         "renderer": {

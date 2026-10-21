@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.volume-booster",
     "name": "Volume Booster",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Increase the maximum user and stream volume.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.relationship-notifier",
     "name": "Relationship Notifier",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Notify when a friend, group chat or server removes you.",
     "entrypoints": {
         "renderer": {

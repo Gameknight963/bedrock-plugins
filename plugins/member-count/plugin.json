@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.member-count",
     "name": "Member Count",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show online, total and voice member counts in the member list and server tooltips.",
     "entrypoints": {
         "renderer": {

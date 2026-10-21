@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.role-color-everywhere",
     "name": "Role Color Everywhere",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show role colors in mentions, member-list headings, voice users, reactions and poll results.",
     "entrypoints": {
         "renderer": {

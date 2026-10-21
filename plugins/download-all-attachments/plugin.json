@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.download-all-attachments",
     "name": "Download All Attachments",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Download every attachment in a message from its toolbar.",
     "entrypoints": {
         "renderer": {

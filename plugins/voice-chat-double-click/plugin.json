@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.voice-chat-double-click",
     "name": "Voice Chat Double Click",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Join voice channels with a double click.",
     "entrypoints": {
         "renderer": {

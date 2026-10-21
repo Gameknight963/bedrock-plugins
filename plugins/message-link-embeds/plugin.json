@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.message-link-embeds",
     "name": "Message Link Embeds",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show a preview of messages linked in chat.",
     "entrypoints": {
         "renderer": {

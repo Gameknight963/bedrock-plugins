@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.server-list-indicators",
     "name": "Server List Indicators",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show online friend and server counts above your servers.",
     "entrypoints": {
         "renderer": {

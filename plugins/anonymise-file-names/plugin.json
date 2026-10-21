@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.anonymise-file-names",
     "name": "Anonymise File Names",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Replace uploaded filenames with anonymous names.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.new-guild-settings",
     "name": "New Guild Settings",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Apply your preferred notification and channel settings when you join a server.",
     "entrypoints": {
         "renderer": {

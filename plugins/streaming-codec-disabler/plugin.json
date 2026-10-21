@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.streaming-codec-disabler",
     "name": "Streaming Codec Disabler",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Choose which video codecs Discord can use for streams and cameras.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.mention-avatars",
     "name": "Mention Avatars",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show user avatars and role icons inside mentions.",
     "entrypoints": {
         "renderer": {

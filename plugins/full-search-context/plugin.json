@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.full-search-context",
     "name": "Full Search Context",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Use the full message context menu when right-clicking search results.",
     "entrypoints": {
         "renderer": {

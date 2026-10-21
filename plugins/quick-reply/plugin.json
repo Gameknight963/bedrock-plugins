@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.quick-reply",
     "name": "Quick Reply",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Reply to and edit messages with keyboard shortcuts.",
     "entrypoints": {
         "renderer": {

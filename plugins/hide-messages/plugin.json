@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.hide-messages",
     "name": "Hide Messages",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Temporarily hide messages and DMs.",
     "entrypoints": {
         "renderer": {

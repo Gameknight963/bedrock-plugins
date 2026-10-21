@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.spotify-crack",
     "name": "Spotify Crack",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Listen along without Spotify Premium and control auto-pausing in voice chat.",
     "entrypoints": {
         "renderer": {

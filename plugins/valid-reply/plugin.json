@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.valid-reply",
     "name": "Valid Reply",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Load missing reply previews when you hover over them.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.more-quick-reactions",
     "name": "More Quick Reactions",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show more quick reactions in message menus and the message actions bar.",
     "entrypoints": {
         "renderer": {

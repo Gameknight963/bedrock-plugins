@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.notification-volume",
     "name": "Notification Volume",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Set a separate volume for notifications and in-app sounds.",
     "entrypoints": {
         "renderer": {

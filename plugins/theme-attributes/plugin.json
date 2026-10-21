@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.theme-attributes",
     "name": "Theme Attributes",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Add CSS selectors and avatar image variables for themes.",
     "entrypoints": {
         "renderer": {

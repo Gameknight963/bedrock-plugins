@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.silent-message-toggle",
     "name": "Silent Message Toggle",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Add a chat button for sending silent messages.",
     "entrypoints": {
         "renderer": {

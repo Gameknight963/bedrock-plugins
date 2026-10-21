@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.custom-idle",
     "name": "Custom Idle",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Choose when Discord goes idle and whether to stay idle when you return.",
     "entrypoints": {
         "renderer": {

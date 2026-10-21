@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.server-info",
     "name": "Server Info",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "View a server's owner, dates, boosts, channel and role counts, and members.",
     "entrypoints": {
         "renderer": {

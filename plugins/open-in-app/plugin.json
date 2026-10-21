@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.open-in-app",
     "name": "Open In App",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Open supported links in their desktop apps.",
     "entrypoints": {
         "renderer": {

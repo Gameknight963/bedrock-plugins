@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.channel-tabs",
     "name": "Channel Tabs",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Keep channels in tabs and organize bookmarks into folders.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.text-replace",
     "name": "Text Replace",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Replace text in messages using simple rules or regular expressions.",
     "entrypoints": {
         "renderer": {

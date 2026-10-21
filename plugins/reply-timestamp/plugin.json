@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.reply-timestamp",
     "name": "Reply Timestamp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show timestamps on replied-message previews.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.no-reply-mention",
     "name": "No Reply Mention",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Disable reply pings by default.",
     "entrypoints": {
         "renderer": {

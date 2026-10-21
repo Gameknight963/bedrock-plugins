@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.read-all-notifications",
     "name": "Read All Notifications",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Mark unread server channels and joined threads as read.",
     "entrypoints": {
         "renderer": {

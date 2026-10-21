@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.show-all-message-buttons",
     "name": "Show All Message Buttons",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show the full message toolbar without holding Shift.",
     "entrypoints": {
         "renderer": {

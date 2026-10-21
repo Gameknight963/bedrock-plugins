@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.quick-mention",
     "name": "Quick Mention",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Mention a message author from the message actions bar.",
     "entrypoints": {
         "renderer": {

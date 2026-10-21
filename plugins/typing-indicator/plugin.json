@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.typing-indicator",
     "name": "Typing Indicator",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Show animated typing dots and user avatars beside channels and threads.",
     "entrypoints": {
         "renderer": {

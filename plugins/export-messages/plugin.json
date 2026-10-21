@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.export-messages",
     "name": "Export Messages",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Export messages to text files and copy your contact list.",
     "entrypoints": {
         "renderer": {

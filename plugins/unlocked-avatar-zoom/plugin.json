@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.unlocked-avatar-zoom",
     "name": "Unlocked Avatar Zoom",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Zoom further into images when cropping an avatar.",
     "entrypoints": {
         "renderer": {

@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.image-zoom",
     "name": "Image Zoom",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Magnify images and GIFs with an adjustable lens.",
     "entrypoints": {
         "renderer": {

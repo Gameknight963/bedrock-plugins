@@ -2,7 +2,7 @@
     "manifestVersion": 3,
     "id": "gameknight963.pin-dms",
     "name": "Pin DMs",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Organize direct messages into pinned categories.",
     "entrypoints": {
         "renderer": {
