@@ -65,10 +65,10 @@ export const patches: SourcePatch[] = [{
     ]
 }, {
     id: 'persistent-idle-notice', find: '"NoticeStore"', replacement: [
-        { match: re(String.raw`(?<=!1;)(\i)=null;(?=.{0,80}getPremiumSubscription\(\))`, 'g'),
-            replace: (_match: string, notice: string) => `if($self.hasNotice(${notice}))return false;${notice}=null;` },
-        { match: re(String.raw`(?<=,NOTICE_DISMISS:function\(\i\){)return null!=(\i)`),
-            replace: (_match: string, notice: string) => `if(${notice}?.id==="${noticeId}"&&(arguments[0].id==null||arguments[0].id==="${noticeId}"))return(${notice}=null,$self.noticeDismissed(),true);return null!=${notice}` }
+        { match: re(String.raw`(?<=!1;)(?=(?:if\(.+?\)return false;)*(\i)=null;(?=.{0,80}getPremiumSubscription\(\)))`, 'g'),
+            replace: (_match: string, notice: string) => `if($self.hasNotice(${notice}))return false;` },
+        { match: re(String.raw`(?<=,NOTICE_DISMISS:function\(\i\){)(?=.{0,1400}?return null!=(\i))`),
+            replace: (_match: string, notice: string) => `if(${notice}?.id==="${noticeId}"&&(arguments[0].id==null||arguments[0].id==="${noticeId}"))return(${notice}=null,$self.noticeDismissed(),true);` }
     ]
 }];
 
